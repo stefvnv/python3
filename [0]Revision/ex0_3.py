@@ -15,7 +15,7 @@ def stepUp():
 
 def stepDown():
     value1 = int(entry2.get())
-    value2 = int(entry3.get())
+    value2 = int(entry4.get())
     value1 = value1 - value2
     entry2.delete(0, END)
     entry2.insert(END, value1)
@@ -44,8 +44,8 @@ entry3.grid(row=1, column=1, sticky=W + E)
 button2 = Button(frame, text="StepDown", fg="black", font=("arial", 10, "bold"), command=stepDown)
 button2.grid(row=2, column=0, sticky=W + E)
 
-entry3 = Entry(frame)
-entry3.insert(END, '1')
-entry3.grid(row=2, column=1, sticky=W + E)
+entry4 = Entry(frame)
+entry4.insert(END, '1')
+entry4.grid(row=2, column=1, sticky=W + E)
 
 mainloop()
