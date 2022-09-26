@@ -10,8 +10,6 @@ def lowestMark(studentL):
 
     for key, value in studentL.items():
 
-
-
     return name
 
 
