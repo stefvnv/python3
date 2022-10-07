@@ -19,7 +19,6 @@ def overline_decorator(func):
         print("=============")
         func(n)
 
-
     return closure
 
 
