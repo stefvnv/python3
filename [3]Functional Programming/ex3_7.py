@@ -15,9 +15,9 @@ def hCount(f, list):
     else:
         first = list.pop(0)
         if f(first.copy()):
-            return 1 + hCount(f, list)
+            return 1 + hCount(f, list.copy())
         else:
-            return 0 + hCount(f, list)
+            return 0 + hCount(f, list.copy())
 
 
 pAdd = lambda list: (0 if len(list) == 0 else list.pop(0) + pAdd(list))
