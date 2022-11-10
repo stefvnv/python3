@@ -1,8 +1,5 @@
-
-
 from tkinter import *
 
-from AssnCL31_Classes import *
 
 def displayDialog(window, movie_list):
     window2 = Toplevel(window)
@@ -10,33 +7,25 @@ def displayDialog(window, movie_list):
     window2.title("Add Dialog")
     movieList = movie_list
 
-
-
-
-
-#============================================================
-# Event Handling Methods
+    # ============================================================
+    # Event Handling Methods
 
     def displayAll():
-        #text.insert(END, movieList[0][0])
+        # text.insert(END, movieList[0][0])
         for i in range(0, len(movieList)):
-            line=''+movieList[i][0]
-            line+= '\t\t\t'+movieList[i][1]
-            line+= '\t\t'+str(movieList[i][2])
-            #line += '\t\tRating=' +str(movieList[i][3])
-            line += '\t\tRating=' +str(movieList[i][4])
-            line += '\t\t' +movieList[i][5]
-            line += '\t\t' +movieList[i][7]
+            line = '' + movieList[i][0]
+            line += '\t\t\t' + movieList[i][1]
+            line += '\t\t' + str(movieList[i][2])
+            # line += '\t\tRating=' +str(movieList[i][3])
+            line += '\t\tRating=' + str(movieList[i][4])
+            line += '\t\t' + movieList[i][5]
+            line += '\t\t' + movieList[i][7]
             netflix = movieList[i][6]
-            if (netflix==True):
+            if (netflix == True):
                 line += '\t\t\tOn Netflix'
-
 
             line += '\n\n'
             text.insert(END, line)
-
-
-
 
     def closeEvent():
         window2.destroy()
@@ -48,17 +37,3 @@ def displayDialog(window, movie_list):
     text.place(x=20, y=60)
 
     displayAll()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
