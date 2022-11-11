@@ -81,6 +81,7 @@ class PriorityCustomer(Customer):
     def getCustomerType(self):  # Priority, Regular, Child
         return "Priority"
 
+
 class CustomerFactory:
     def getCustomer(self, name, age, priority, price):
 

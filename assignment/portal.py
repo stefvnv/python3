@@ -1,11 +1,15 @@
 import sqlite3
 from tkinter import *
-from Employee import *
+from employee import *
 
-window = Tk()
-window.geometry("1280x720")
-window.title("Employee Portal | Employee Management System")
-window.resizable(False, False)
+
+# ADD ALL GUI STUFF INSIDE THIS METHOD
+def initiate_portal(window):
+    """Initiates the GUI"""
+
+    portal = Toplevel(window)
+    portal.geometry("1280x720")
+    portal.title("Employee Portal - Employee Management System")
 
 
 # Methods to display data
@@ -40,7 +44,7 @@ try:
 except:
     print("Employee Already Exists")
 
-#
+'''
 label_title = Label(window, text="Product Application", fg="blue", bg="yellow", font=("arial", 16, "bold"))
 label_title.place(x=90, y=30)
 
@@ -68,3 +72,4 @@ mainloop()
 
 #to do
 #connect to employee gui based on employee
+'''
