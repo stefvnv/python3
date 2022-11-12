@@ -1,8 +1,36 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
+from io import BytesIO
 from PIL import Image, ImageTk
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
 my_w = tk.Tk()
 my_w.geometry("400x300")  # Size of the window
 my_w.title('www.plus2net.com')
@@ -24,3 +52,4 @@ def upload_file():
 
 
 my_w.mainloop()  # Keep the window open
+'''

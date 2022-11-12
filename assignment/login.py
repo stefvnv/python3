@@ -7,6 +7,10 @@ window.geometry("1280x720")
 window.title("Employee Portal - Employee Management System | Login")
 window.resizable(False, False)
 
+# fonts
+title_font = ("Haettenschweiler", 40)
+subtitle_font = ("Century Gothic", 20, 'bold')
+body_font = ("Century Gothic", 12, 'bold')
 
 def show_password():
     """Shows or hides password based on whether checkbutton is selected"""
@@ -40,20 +44,21 @@ frame = Frame(window, width=800, height=500, bg="green", borderwidth=2, relief="
 frame.place(x=250, y=100)
 
 # ======Title======
-label_title = Label(window, text="Login", fg="blue", bg="yellow", font=("arial", 16, "bold"))
-label_title.place(x=600, y=80)
+label_title = Label(window, text="Login", fg="blue", bg="yellow", font=title_font)
+label_title.place(x=600, y=60)
 
 # ======Username label======
-label_username = Label(window, text="Username", fg="blue", bg="white", font=("arial", 16, "bold"))
+label_username = Label(window, text="Username", fg="blue", bg="white", font=body_font)
 label_username.place(x=400, y=200)
 
 # ======Username entry box======
 entry_username = Entry(window, width=20)
 entry_username.insert(END, '')
+entry_username.focus_set()
 entry_username.place(x=600, y=200)
 
 # ======Password label======
-label_password = Label(window, text="Password", fg="blue", width=15, font=("arial", 10, "bold"))
+label_password = Label(window, text="Password", fg="blue", width=15, font=body_font)
 label_password.place(x=400, y=300)
 
 # ======Password entry box======
