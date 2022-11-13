@@ -2,13 +2,20 @@ from tkinter import *
 from io import BytesIO
 
 
-def display_employee(window_portal):
+def display_employee(window_portal, emp_data):
     window_employee = Toplevel(window_portal)
     window_employee.geometry("720x1000")
     window_employee.title("Employee Portal - Employee Management System | Employee Information")
     window_employee.resizable(False, False)
 
     # ============ METHODS ============
+    def display_instance():
+        label_title.config(text=emp_data[0].read_id())
+
+
+    # def update_employee():
+
+    # def delete_employee():
 
     # ============ GUI ============
 
@@ -155,3 +162,5 @@ def display_employee(window_portal):
     # ======Delete button======
     button_delete = Button(window_employee, text="Delete")
     button_delete.place(x=480, y=900)
+
+    display_instance()
