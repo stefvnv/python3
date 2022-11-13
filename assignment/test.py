@@ -1,3 +1,5 @@
+# TEST FILE - to be deleted
+
 import sqlite3
 from tkinter import *
 
@@ -5,8 +7,6 @@ window = Tk()
 window.geometry("800x600")
 window.title("Employee Portal | Employee Management System")
 window.resizable(False, False)
-
-# testing
 
 # Database
 con = sqlite3.connect("../employees.db")
@@ -32,9 +32,6 @@ except:
     print("Employee Already Exists")
 
 
-
-
-# MAKE THIS INTO ANOTHER CLASS
 class Employee:
     def __init__(self, emp_id, emp_name):
         self.id = emp_id
@@ -87,7 +84,6 @@ def fillout(e):
     entry_name.insert(END, emp_list[current_index].read_name())
 
     # complete for each of the entry boxes
-
 
 
 def check(e):

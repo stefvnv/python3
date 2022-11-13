@@ -1,3 +1,5 @@
+# TEST FILE - to be deleted
+
 from tkinter import *
 from time import strftime
 from tkinter import Tk, messagebox

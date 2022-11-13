@@ -12,6 +12,7 @@ title_font = ("Haettenschweiler", 40)
 subtitle_font = ("Century Gothic", 20, 'bold')
 body_font = ("Century Gothic", 12, 'bold')
 
+
 def show_password():
     """Shows or hides password based on whether checkbutton is selected"""
 
@@ -30,14 +31,14 @@ def show_password():
 def login():
     """Logs user in if username and password entries are correct"""
 
-    if entry_username.get() == "root" and password.get() == "pw":
-        initiate_portal(window)
+    # if entry_username.get() == "root" and password.get() == "pw":
+    initiate_portal(window)
 
-        # removes login window
-        window.withdraw()
-        messagebox.showinfo("Success", "You have logged in to Employee Portal successfully.")
-    else:
-        messagebox.showerror("Error", "The login information entered is incorrect.\nTry again.")
+    # removes login window
+    window.withdraw()
+    messagebox.showinfo("Success", "You have logged in to Employee Portal successfully.")
+    # else:
+    #     messagebox.showerror("Error", "The login information entered is incorrect.\nTry again.")
 
 
 frame = Frame(window, width=800, height=500, bg="green", borderwidth=2, relief="solid")
