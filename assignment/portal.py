@@ -101,18 +101,16 @@ def initiate_portal(window):
     def view_employee():
         global current_index, emp_list
 
-        listbox_id.get(ANCHOR)
+        display_employee(window_portal, emp_list, current_index)
 
-        display_employee(window_portal, emp_list)
 
-        global counter
-
+        #global counter
         # ensures employee tab can only be opened once
-        if counter < 2:
-            display_employee(window_portal)
-            counter += 1
-        else:
-            messagebox.showinfo("Information", "Only one employee can be viewed at a time.")
+        #if counter < 2:
+        #    display_employee(window_portal)
+        #    counter += 1
+        #else:
+        #    messagebox.showinfo("Information", "Only one employee can be viewed at a time.")
 
     # GUI
 

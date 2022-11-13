@@ -1,8 +1,10 @@
 from tkinter import *
 from io import BytesIO
 
+from PIL import Image, ImageTk
 
-def display_employee(window_portal, emp_data):
+
+def display_employee(window_portal, emp_data, index):
     window_employee = Toplevel(window_portal)
     window_employee.geometry("720x1000")
     window_employee.title("Employee Portal - Employee Management System | Employee Information")
@@ -10,8 +12,43 @@ def display_employee(window_portal, emp_data):
 
     # ============ METHODS ============
     def display_instance():
-        label_title.config(text=emp_data[0].read_id())
+        label_current.config(text="Employee ID: " + emp_data[index].read_id())
 
+        entry_id.delete(0, END)
+        entry_id.insert(END, emp_data[index].read_id())
+
+        entry_first_name.delete(0, END)
+        entry_first_name.insert(END, emp_data[index].read_first_name())
+
+        entry_surname.delete(0, END)
+        entry_surname.insert(END, emp_data[index].read_surname())
+
+        # to do gender
+
+        # to do department
+
+        entry_position.delete(0, END)
+        entry_position.insert(END, emp_data[index].read_position())
+
+        # to do date of birth
+
+        # to do start date
+
+        entry_email.delete(0, END)
+        entry_email.insert(END, emp_data[index].read_email())
+
+        spinbox_salary.delete(0, END)
+        spinbox_salary.insert(END, emp_data[index].read_salary())
+
+        #text_address.delete(0, END)
+        text_address.insert(END, emp_data[index].read_address())
+
+        # to do active radiobutton
+
+        # render and insert image
+        img_byte = BytesIO(emp_data[index].read_picture())
+        window_employee.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
+        label_picture.config(image=window_employee.image)
 
     # def update_employee():
 
@@ -28,7 +65,7 @@ def display_employee(window_portal, emp_data):
     label_title.place(x=10, y=10)
 
     # ======Current Employee ID label======
-    label_current = Label(frame_header, text="Employee ID: TO DO")
+    label_current = Label(frame_header, text="")
     label_current.place(x=500, y=10)
 
     # ======Employee ID label======
@@ -104,7 +141,7 @@ def display_employee(window_portal, emp_data):
     entry_dob.place(x=150, y=520)
 
     # ======Start date label======
-    label_start_date = Label(window_employee, text="Date of Birth:")
+    label_start_date = Label(window_employee, text="Start Date:")
     label_start_date.place(x=380, y=520)
 
     # ======Start date entry box======
@@ -154,6 +191,10 @@ def display_employee(window_portal, emp_data):
     # ======Address label======
     text_address = Text(window_employee, width=64, height=10)
     text_address.place(x=150, y=720)
+
+    # ======Picture label======
+    label_picture = Label(window_employee, borderwidth=4, relief="solid")
+    label_picture.place(x=500, y=120)
 
     # ======Update button======
     button_update = Button(window_employee, text="Update")

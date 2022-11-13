@@ -1,16 +1,10 @@
-from tkinter import *
-from tkinter import messagebox
 from portal import *
+from fonts import *
 
 window = Tk()
 window.geometry("1280x720")
 window.title("Employee Portal - Employee Management System | Login")
 window.resizable(False, False)
-
-# fonts
-title_font = ("Haettenschweiler", 40)
-subtitle_font = ("Century Gothic", 20, 'bold')
-body_font = ("Century Gothic", 12, 'bold')
 
 
 def show_password():
@@ -49,7 +43,7 @@ label_title = Label(window, text="Login", fg="blue", bg="yellow", font=title_fon
 label_title.place(x=600, y=60)
 
 # ======Username label======
-label_username = Label(window, text="Username", fg="blue", bg="white", font=body_font)
+label_username = Label(window, text="Username", bg="white", font=body_font)
 label_username.place(x=400, y=200)
 
 # ======Username entry box======
@@ -59,7 +53,7 @@ entry_username.focus_set()
 entry_username.place(x=600, y=200)
 
 # ======Password label======
-label_password = Label(window, text="Password", fg="blue", width=15, font=body_font)
+label_password = Label(window, text="Password", font=body_font)
 label_password.place(x=400, y=300)
 
 # ======Password entry box======
