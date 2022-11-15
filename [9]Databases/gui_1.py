@@ -1,7 +1,7 @@
 import sqlite3
 from tkinter import *
 
-from AssnCl31_Gui2 import *
+from gui_2 import *
 
 window = Tk()
 window.geometry("300x500")
@@ -17,6 +17,7 @@ def displayChange():
 
 
 def display(index):
+    print('here')
     global current
     global product
     cur.execute("select * from Movie")
@@ -47,7 +48,7 @@ def display(index):
 # End of Method Declarations
 # ========================================================================
 # Database Setup
-con = sqlite3.connect("../[9]Databases/tutorial.db")
+con = sqlite3.connect("../tutorial.db")
 cur = con.cursor()
 try:
     # cur.execute("DROP TABLE Movie")
@@ -74,6 +75,13 @@ except:
 
 
 # -------Event Handling Methods ---------------
+
+def netflixDisplay():
+    #cur.execute("select * from Movie")
+    cur.execute("select * from Movie where netflix = True")
+    netflixMovies = cur.fetchall()
+    displayDialog(window, netflixMovies)
+
 
 def cmdYearDisplay():
     year = yearTypeVar.get()
@@ -110,9 +118,9 @@ def updateRatingCmd():
     newRating = int(ratingTypeVar.get())
 
     cur.execute("Update Movie set count=count + 1 where title = \'" + title + "\'")
-    newAverage = ((count * curr_rating + newRating)) / (count + 1)
+    newAverage = (count * curr_rating + newRating) / (count + 1)
     newAverage = newAverage.__round__(3)
-    cur.execute("Update Movie set rating=\'" + str(newAverage) + "\' where title = \'" + title + "\'")
+    cur.execute("Update Movie set rating=\'" + str(newRating) + "\' where title = \'" + title + "\'")
     con.commit()
     display(current)
 
@@ -121,14 +129,14 @@ def nextCmd():
     global current
     cur.execute("select * from Movie")
     allMovies = cur.fetchall()
-    if (current < (len(allMovies) - 1)):
+    if current < (len(allMovies) - 1):
         current += 1
         display(current)
 
 
 def prevCmd():
     global current
-    if (current > 0):
+    if current > 0:
         current -= 1
         display(current)
 
@@ -161,7 +169,7 @@ def insertCmd():
     location = entry5.get()
     description1 = entry7.get()
     onNetflix = False
-    if (var_cb1.get() == 1):
+    if var_cb1.get() == 1:
         onNetflix = True
     newGenre = productTypeVar.get()
     newFilm = [
@@ -265,7 +273,7 @@ button7.grid(row=12, column=0, sticky=W + E)
 button8 = Button(frame, text="InsertItem", fg="black", font=("arial", 10, "bold"), command=insertCmd)
 button8.grid(row=12, column=1, sticky=W + E)
 
-button11 = Button(frame, text="Add Rating", fg="black", font=("arial", 10, "bold"), command=updateRatingCmd)
+button11 = Button(frame, text="Reset Rating", fg="black", font=("arial", 10, "bold"), command=updateRatingCmd)
 button11.grid(row=15, column=0, sticky=W + E)
 
 list11 = ['1', '2', '3', '4', '5']
@@ -278,12 +286,11 @@ labelBlank2 = Label(frame, text=" ", fg="blue", width=15, font=("arial", 10, "bo
 labelBlank2.grid(row=16, column=0, columnspan=2, sticky=W + E)
 
 cur.execute("select * from Movie")
-allMovies = cur.fetchall()
-button12 = Button(frame, text="Display All Movies", fg="black", font=("arial", 10, "bold"),
-                  command=lambda: displayDialog(window, allMovies))
+netflixMovies = cur.fetchall()
+button12 = Button(frame, text="Display Netflix Movies", fg="black", font=("arial", 10, "bold"), command=netflixDisplay)
 button12.grid(row=17, column=0, columnspan=2, sticky=W + E)
 
-button12 = Button(frame, text="Display By Year", fg="black", font=("arial", 10, "bold"), command=cmdYearDisplay)
+button12 = Button(frame, text="Display After Year", fg="black", font=("arial", 10, "bold"), command=cmdYearDisplay)
 button12.grid(row=18, column=0, columnspan=1, sticky=W + E)
 
 yearTypeVar = StringVar()
