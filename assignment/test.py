@@ -8,12 +8,9 @@ class NewWindow:
     @staticmethod
     def open_instance():
         if NewWindow.instance is None:
-            print("clik")
             window_new = Toplevel(window)
             window_new.geometry("200x100")
             NewWindow()
-
-    # return NewWindow.instance
 
     def __init__(self):
         if NewWindow.instance is None:

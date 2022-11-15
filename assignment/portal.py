@@ -1,19 +1,38 @@
+import tkinter
 from tkinter import *
 from time import strftime
 from tkinter import Tk, messagebox
 from instance import *
 from Employee import *
-from Singleton import *
 from io import BytesIO
 from PIL import Image, ImageTk
 from database import *
 
 # variables
-
-counter = 1
-
 global current_index
 emp_list = []
+emp_displayer = EmployeeDisplayer()
+
+
+class Singleton:
+    instance = None
+    open_window = None
+
+    @staticmethod
+    def open_instance(window_portal, current, employee_list):
+        if Singleton.instance is None:
+            emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            Singleton()
+
+        # test
+        if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
+            emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            Singleton()
+
+
+    def __init__(self):
+        if Singleton.instance is None:
+            Singleton.instance = self
 
 
 # ADD ALL GUI STUFF INSIDE THIS METHOD
@@ -99,22 +118,17 @@ def initiate_portal(window):
         entry_search.bind("<KeyRelease>", check)
 
     # FIX - CHECK IF INSTANCE IS ALREADY OPEN
-    def view_employee():
-        global current_index, emp_list
+    # def view_employee():
+    #   global current_index, emp_list
 
-        #single_instance = Singleton()
+    # ensures employee tab can only be opened once
+    # if counter < 2:
+    #    display_employee(window_portal)
+    #    counter += 1
+    # else:
+    #    messagebox.showinfo("Information", "Only one employee can be viewed at a time.")
 
-        display_employee(window_portal, emp_list, current_index).Singleton()
-
-        # global counter
-        # ensures employee tab can only be opened once
-        # if counter < 2:
-        #    display_employee(window_portal)
-        #    counter += 1
-        # else:
-        #    messagebox.showinfo("Information", "Only one employee can be viewed at a time.")
-
-    # GUI
+    # ============ GUI ============
 
     # ======Frame Header======
     frame_header = Frame(window_portal, width=1280, height=60, bg="red")
@@ -125,7 +139,7 @@ def initiate_portal(window):
     label_clock.place(x=1000, y=10)
 
     # ======Title label======
-    label_title = Label(frame_header, text="Employee Portal Dashboard")
+    label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")
     label_title.place(x=10, y=10)
 
     # ======Search Employee label======
@@ -174,8 +188,18 @@ def initiate_portal(window):
     label_picture.place(x=600, y=200)
 
     # ======View employee button======
-    button_view_employee = Button(window_portal, text="View/Edit Full Employee Profile", command=view_employee)
+    button_view_employee = Button(window_portal, text="View/Edit Full Employee Profile",
+                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
     button_view_employee.place(x=200, y=600)
+
+    def test_existence():
+        if tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
+            print("fui")
+        else:
+            print("nyee")
+
+    button_test = Button(window_portal, text="Click Meh Daddy", command=test_existence)
+    button_test.place(x=400, y=600)
 
     # start methods
     search()
