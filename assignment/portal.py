@@ -3,6 +3,7 @@ from time import strftime
 from tkinter import Tk, messagebox
 from instance import *
 from Employee import *
+from Singleton import *
 from io import BytesIO
 from PIL import Image, ImageTk
 from database import *
@@ -101,15 +102,16 @@ def initiate_portal(window):
     def view_employee():
         global current_index, emp_list
 
-        display_employee(window_portal, emp_list, current_index)
+        #single_instance = Singleton()
 
+        display_employee(window_portal, emp_list, current_index).Singleton()
 
-        #global counter
+        # global counter
         # ensures employee tab can only be opened once
-        #if counter < 2:
+        # if counter < 2:
         #    display_employee(window_portal)
         #    counter += 1
-        #else:
+        # else:
         #    messagebox.showinfo("Information", "Only one employee can be viewed at a time.")
 
     # GUI

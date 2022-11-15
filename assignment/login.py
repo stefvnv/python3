@@ -6,6 +6,8 @@ window.geometry("1280x720")
 window.title("Employee Portal - Employee Management System | Login")
 window.resizable(False, False)
 
+background = PhotoImage(file="./images/background.png")
+
 
 def show_password():
     """Shows or hides password based on whether checkbutton is selected"""
@@ -35,41 +37,43 @@ def login():
     #     messagebox.showerror("Error", "The login information entered is incorrect.\nTry again.")
 
 
-frame = Frame(window, width=800, height=500, bg="green", borderwidth=2, relief="solid")
-frame.place(x=250, y=100)
+# ====== Canvas ======
+canvas = Canvas(window, width=1280, height=720, highlightthickness=0)
+canvas.pack(fill="both", expand=True)
 
-# ======Title======
-label_title = Label(window, text="Login", fg="blue", bg="yellow", font=title_font)
-label_title.place(x=600, y=60)
+# ====== Background image ======
+canvas.create_image(0, 0, image=background, anchor="nw")
 
-# ======Username label======
-label_username = Label(window, text="Username", bg="white", font=body_font)
-label_username.place(x=400, y=200)
+# ======Title text======
+canvas.create_text(640, 80, text="Employee Portal", font=title_font, fill="white")
+canvas.create_text(640, 200, text="Login", font=subtitle_font, fill="lightgreen")
+
+# ======Username text======
+canvas.create_text(550, 300, text="Username", font=body_font, fill="white")
 
 # ======Username entry box======
 entry_username = Entry(window, width=20)
 entry_username.insert(END, '')
 entry_username.focus_set()
-entry_username.place(x=600, y=200)
+entry_username.place(x=600, y=300)
 
-# ======Password label======
-label_password = Label(window, text="Password", font=body_font)
-label_password.place(x=400, y=300)
+# ======Password text======
+canvas.create_text(550, 380, text="Password", font=body_font, fill="white")
 
 # ======Password entry box======
 password = StringVar()
 
 entry_password = Entry(window, width=20, textvariable=password, show="•")
 entry_password.insert(END, '')
-entry_password.place(x=600, y=300)
+entry_password.place(x=600, y=380)
 
 # ======Forgot password checkbox======
 var_checkbutton = IntVar()
 checkbutton_show_password = Checkbutton(window, text="Show password", variable=var_checkbutton, command=show_password)
-checkbutton_show_password.place(x=600, y=400)
+checkbutton_show_password.place(x=600, y=430)
 
 # ======Login button======
 button_login = Button(window, text="Login", fg="black", font=("arial", 10, "bold"), command=login)
-button_login.place(x=600, y=500)
+button_login.place(x=620, y=500)
 
 mainloop()
