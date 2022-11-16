@@ -97,6 +97,8 @@ class EmployeeDisplayer:
             self.window_employee.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
             label_picture.config(image=self.window_employee.image)
 
+
+
         # def update_employee():
 
         # def delete_employee():

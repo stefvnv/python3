@@ -7,6 +7,7 @@ from Employee import *
 from io import BytesIO
 from PIL import Image, ImageTk
 from database import *
+from create_employee import *
 
 # variables
 global current_index
@@ -16,7 +17,8 @@ emp_displayer = EmployeeDisplayer()
 
 class Singleton:
     instance = None
-    open_window = None
+    new = None
+    #open_window = None
 
     @staticmethod
     def open_instance(window_portal, current, employee_list):
@@ -24,15 +26,24 @@ class Singleton:
             emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
             Singleton()
 
-        # test
         if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
             emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
             Singleton()
 
+    @staticmethod
+    def open_new(window_portal):
+        if Singleton.new is None:
+            create_employee(window_portal)
+            Singleton()
+        else:
+            print("wtf")
 
     def __init__(self):
         if Singleton.instance is None:
             Singleton.instance = self
+
+        if Singleton.new is None:
+            Singleton.new = self
 
 
 # ADD ALL GUI STUFF INSIDE THIS METHOD
@@ -80,9 +91,9 @@ def initiate_portal(window):
             entry_search.delete(0, END)
             entry_search.insert(0, listbox_id.get(ANCHOR))
 
-            for emp in range(len(emp_list)):
-                if emp_list[emp].read_id() == listbox_id.get(ANCHOR):
-                    current_index = emp
+            for e in range(len(emp_list)):
+                if emp_list[e].read_id() == listbox_id.get(ANCHOR):
+                    current_index = e
 
             entry_first_name.delete(0, END)
             entry_first_name.insert(END, emp_list[current_index].read_first_name())
@@ -116,17 +127,6 @@ def initiate_portal(window):
 
         listbox_id.bind("<<ListboxSelect>>", fill)
         entry_search.bind("<KeyRelease>", check)
-
-    # FIX - CHECK IF INSTANCE IS ALREADY OPEN
-    # def view_employee():
-    #   global current_index, emp_list
-
-    # ensures employee tab can only be opened once
-    # if counter < 2:
-    #    display_employee(window_portal)
-    #    counter += 1
-    # else:
-    #    messagebox.showinfo("Information", "Only one employee can be viewed at a time.")
 
     # ============ GUI ============
 
@@ -192,14 +192,10 @@ def initiate_portal(window):
                                   command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
     button_view_employee.place(x=200, y=600)
 
-    def test_existence():
-        if tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
-            print("fui")
-        else:
-            print("nyee")
-
-    button_test = Button(window_portal, text="Click Meh Daddy", command=test_existence)
-    button_test.place(x=400, y=600)
+    # ======Add new employee button======
+    button_add = Button(window_portal, text="Add New Employee",
+                        command=lambda: Singleton.open_new(window_portal))
+    button_add.place(x=400, y=600)
 
     # start methods
     search()
