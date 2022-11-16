@@ -18,32 +18,26 @@ emp_displayer = EmployeeDisplayer()
 class Singleton:
     instance = None
     new = None
-    #open_window = None
 
     @staticmethod
-    def open_instance(window_portal, current, employee_list):
+    def open_instance(window_portal, current, employee_list, window_type):
         if Singleton.instance is None:
-            emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            if window_type == 1:
+                emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            elif window_type == 2:
+                create_employee(window_portal)
             Singleton()
 
         if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
-            emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            if window_type == 1:
+                emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            elif window_type == 2:
+                create_employee(window_portal)
             Singleton()
-
-    @staticmethod
-    def open_new(window_portal):
-        if Singleton.new is None:
-            create_employee(window_portal)
-            Singleton()
-        else:
-            print("wtf")
 
     def __init__(self):
         if Singleton.instance is None:
             Singleton.instance = self
-
-        if Singleton.new is None:
-            Singleton.new = self
 
 
 # ADD ALL GUI STUFF INSIDE THIS METHOD
@@ -189,12 +183,12 @@ def initiate_portal(window):
 
     # ======View employee button======
     button_view_employee = Button(window_portal, text="View/Edit Full Employee Profile",
-                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
+                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list, 1))
     button_view_employee.place(x=200, y=600)
 
     # ======Add new employee button======
     button_add = Button(window_portal, text="Add New Employee",
-                        command=lambda: Singleton.open_new(window_portal))
+                        command=lambda: Singleton.open_instance(window_portal, 0, 0, 2))
     button_add.place(x=400, y=600)
 
     # start methods

@@ -1,3 +1,4 @@
+import contextlib
 from tkinter import *
 from io import BytesIO
 from tkinter import messagebox
@@ -5,7 +6,9 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 
+from Employee import *
 from fonts import *
+from database import *
 
 
 def create_employee(window_portal):
@@ -16,12 +19,22 @@ def create_employee(window_portal):
     window_create.config(bg="#B0B6A1")
 
     # ============ METHODS ============
-    def read_window():
-        return window_create
+    def add_to_database():
+        new_id = entry_id.get()
+        new_first_name = entry_first_name.get()
+
+        new_employee = [(new_id, new_first_name)]
+
+        cur.executemany("INSERT into Employee VALUES(?,?)", new_employee)
+        con.commit()
+        print("ADDED!!!!!!!!!!!!!!!!!!!")
+        #cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
+
 
 
     def on_closing():
         window_create.destroy()
+
     window_create.protocol("WM_DELETE_WINDOW", on_closing)
 
     # ============ GUI ============
@@ -165,11 +178,6 @@ def create_employee(window_portal):
     label_picture = Label(window_create, relief="raised")
     label_picture.place(x=460, y=120)
 
-    # ======Update button======
-    button_update = Button(window_create, text="Update")
-    button_update.place(x=200, y=900)
-
-    # ======Delete button======
-    button_delete = Button(window_create, text="Delete")
-    button_delete.place(x=480, y=900)
-
+    # ======Add button======
+    button_add = Button(window_create, text="Add", command=add_to_database)
+    button_add.place(x=340, y=900)

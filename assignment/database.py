@@ -3,6 +3,7 @@ import sqlite3
 con = sqlite3.connect("../employees.db")
 cur = con.cursor()
 
+'''
 try:
     cur.execute(
         "CREATE TABLE Employee(emp_id INTEGER(10) PRIMARY KEY, first_name VARCHAR(45), surname VARCHAR(45), "
@@ -18,6 +19,17 @@ try:
          "./images/mary.jpg")]
 
     cur.executemany("INSERT INTO Employee VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
+    con.commit()
+    '''
+
+try:
+    cur.execute(
+        "CREATE TABLE Employee(emp_id INTEGER(10) PRIMARY KEY, first_name VARCHAR(45))")
+    data = [
+        (543, "Peter"),
+        (201, "Mary Jane")]
+
+    cur.executemany("INSERT INTO Employee VALUES(?, ?)", data)
     con.commit()
 
 except:
