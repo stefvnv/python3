@@ -165,8 +165,8 @@ class EmployeeDisplayer:
         radiobutton_female.place(x=260, y=360)
 
         # ======Department label======
-        label_surname = Label(self.window_employee, text="Department:")
-        label_surname.place(x=50, y=440)
+        label_department = Label(self.window_employee, text="Department:")
+        label_department.place(x=50, y=440)
 
         # ======Department option menu======
         list_departments = ["Business Development", "Services", "Marketing", "Engineering", "Training", "Legal",

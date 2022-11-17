@@ -22,6 +22,10 @@ def create_employee(window_portal):
     def add_to_database():
         new_id = entry_id.get()
         new_first_name = entry_first_name.get()
+        new_surname = entry_surname.get()
+        new_gender = rb_gender.get()
+        new_
+
 
         new_employee = [(new_id, new_first_name)]
 
@@ -92,8 +96,8 @@ def create_employee(window_portal):
     radiobutton_female.place(x=260, y=360)
 
     # ======Department label======
-    label_surname = Label(window_create, text="Department:")
-    label_surname.place(x=50, y=440)
+    label_department = Label(window_create, text="Department:")
+    label_department.place(x=50, y=440)
 
     # ======Department option menu======
     list_departments = ["Business Development", "Services", "Marketing", "Engineering", "Training", "Legal",
