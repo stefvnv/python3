@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 
 from fonts import *
+from database import *
 
 
 class EmployeeDisplayer:
@@ -97,9 +98,31 @@ class EmployeeDisplayer:
             self.window_employee.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
             label_picture.config(image=self.window_employee.image)
 
+        def update_employee():
+
+            current_employee = cur.fetchall()[emp_data[index]]
+
+            new_id = entry_id.get()
+            new_first_name = entry_first_name.get()
+            new_surname = entry_surname.get()
+            new_gender = rb_gender.get()
+            new_department = department.get()
+            new_position = entry_position.get()
+            new_dob = date_entry_dob.get()
+            new_email = entry_email.get()
+            new_contact = entry_contact.get()
+            new_salary = spinbox_salary.get()
+            new_active = rb_active.get()
+            new_address = text_address.get("1.0", END)
+
+            # complete
+            new_picture = ""
+
+            new_employee = [
+                (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob, new_email,
+                 new_contact, new_salary, new_active, new_address, new_picture)]
 
 
-        # def update_employee():
 
         # def delete_employee():
 

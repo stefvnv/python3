@@ -122,6 +122,15 @@ def initiate_portal(window):
         listbox_id.bind("<<ListboxSelect>>", fill)
         entry_search.bind("<KeyRelease>", check)
 
+    def logout():
+
+        # fix - click log out and delete old info
+        window_portal.quit()
+        window.deiconify()
+
+    def exit_app():
+        window.quit()
+
     # ============ GUI ============
 
     # ======Frame Header======
@@ -190,6 +199,14 @@ def initiate_portal(window):
     button_add = Button(window_portal, text="Add New Employee",
                         command=lambda: Singleton.open_instance(window_portal, 0, 0, 2))
     button_add.place(x=400, y=600)
+
+    # ======Log out button======
+    button_log_out = Button(window_portal, text="Log out", command=logout)
+    button_log_out.place(x=600, y=600)
+
+    # ======Exit button======
+    button_exit = Button(window_portal, text="Exit", command=exit_app)
+    button_exit.place(x=800, y=600)
 
     # start methods
     search()

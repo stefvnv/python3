@@ -24,17 +24,26 @@ def create_employee(window_portal):
         new_first_name = entry_first_name.get()
         new_surname = entry_surname.get()
         new_gender = rb_gender.get()
-        new_
+        new_department = department.get()
+        new_position = entry_position.get()
+        new_dob = date_entry_dob.get()
+        new_email = entry_email.get()
+        new_contact = entry_contact.get()
+        new_salary = spinbox_salary.get()
+        new_active = rb_active.get()
+        new_address = text_address.get("1.0", END)
 
+        # complete
+        new_picture = ""
 
-        new_employee = [(new_id, new_first_name)]
+        new_employee = [
+            (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob, new_email,
+             new_contact, new_salary, new_active, new_address, new_picture)]
 
-        cur.executemany("INSERT into Employee VALUES(?,?)", new_employee)
+        cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
         con.commit()
-        print("ADDED!!!!!!!!!!!!!!!!!!!")
-        #cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
 
-
+        messagebox.showinfo("Employee Added", "Employee added to database successfully.")
 
     def on_closing():
         window_create.destroy()
@@ -88,6 +97,7 @@ def create_employee(window_portal):
 
     # ======Gender radio buttons======
     rb_gender = IntVar()
+    rb_gender.set(1)
 
     radiobutton_male = Radiobutton(window_create, text="Male", variable=rb_gender, value=1)
     radiobutton_male.place(x=150, y=360)
@@ -163,6 +173,7 @@ def create_employee(window_portal):
 
     # ======Active radio buttons======
     rb_active = IntVar()
+    rb_active.set(1)
 
     radiobutton_yes = Radiobutton(window_create, text="Yes", variable=rb_active, value=1)
     radiobutton_yes.place(x=450, y=640)
