@@ -100,9 +100,11 @@ class EmployeeDisplayer:
 
         def update_employee():
 
-            current_employee = cur.fetchall()[emp_data[index]]
+            cur.execute("SELECT * FROM Employee")
+            current_employee = cur.fetchall()[index]
+            print(current_employee)
 
-            new_id = entry_id.get()
+            #new_id = entry_id.get()
             new_first_name = entry_first_name.get()
             new_surname = entry_surname.get()
             new_gender = rb_gender.get()
@@ -118,11 +120,9 @@ class EmployeeDisplayer:
             # complete
             new_picture = ""
 
-            new_employee = [
-                (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob, new_email,
-                 new_contact, new_salary, new_active, new_address, new_picture)]
 
-
+            cur.execute("UPDATE Employee SET first_name = \'" + new_first_name + "\'")
+            messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
 
         # def delete_employee():
 
@@ -276,7 +276,7 @@ class EmployeeDisplayer:
         label_picture.place(x=460, y=120)
 
         # ======Update button======
-        button_update = Button(self.window_employee, text="Update")
+        button_update = Button(self.window_employee, text="Update", command=update_employee)
         button_update.place(x=200, y=900)
 
         # ======Delete button======

@@ -10,7 +10,7 @@ from database import *
 from create_employee import *
 
 # variables
-current_index = 0
+current_index = None
 emp_list = []
 emp_displayer = EmployeeDisplayer()
 
@@ -20,21 +20,23 @@ class Singleton:
 
     @staticmethod
     def open_instance(window_portal, current, employee_list, window_type):
+        if Singleton.instance is None:
 
-            if Singleton.instance is None:
-                if window_type == 1:
+            if window_type == 1:
+                if current_index is not None:
                     emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
-                elif window_type == 2:
-                    create_employee(window_portal)
-                Singleton()
+                else:
+                    messagebox.showwarning("Warning", "An employee must be selected to proceed.")
+            elif window_type == 2:
+                create_employee(window_portal)
+            Singleton()
 
-            if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
-                if window_type == 1:
-                    emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
-                elif window_type == 2:
-                    create_employee(window_portal)
-                Singleton()
-
+        if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
+            if window_type == 1:
+                emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+            elif window_type == 2:
+                create_employee(window_portal)
+            Singleton()
 
     def __init__(self):
         if Singleton.instance is None:
@@ -127,7 +129,7 @@ def initiate_portal(window):
         entry_search.bind("<KeyRelease>", check)
 
     def logout():
-        #emp_id_list = []
+        # emp_id_list = []
         window_portal.destroy()
         window.deiconify()
 
