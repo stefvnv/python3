@@ -121,7 +121,7 @@ class EmployeeDisplayer:
             new_picture = ""
 
             cur.execute(
-                "UPDATE Employee SET first_name = \'" + new_first_name + "\', surname = \'" + new_surname + "\',  gender = \'" + new_gender + "\', department = \'" + new_department + "\', WHERE emp_id = \'" + entry_id.get() + "\'")
+                "UPDATE Employee SET first_name = (\'" + new_first_name + "\'), surname = (\'" + new_surname + "\'),  gender = (\'" + new_gender + "\'), department = (\'" + new_department + "\'), position = (\'" + new_position + "\') WHERE emp_id = \'" + entry_id.get() + "\'")
 
             con.commit()
 
