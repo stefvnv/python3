@@ -22,6 +22,6 @@ try:
     con.commit()
 
 except:
-    print("Employee database has not been created as it already exists.")
+    print("Employees database has not been created as it already exists.")
 
 

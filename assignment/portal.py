@@ -10,30 +10,31 @@ from database import *
 from create_employee import *
 
 # variables
-global current_index
+current_index = 0
 emp_list = []
 emp_displayer = EmployeeDisplayer()
 
 
 class Singleton:
     instance = None
-    new = None
 
     @staticmethod
     def open_instance(window_portal, current, employee_list, window_type):
-        if Singleton.instance is None:
-            if window_type == 1:
-                emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
-            elif window_type == 2:
-                create_employee(window_portal)
-            Singleton()
 
-        if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
-            if window_type == 1:
-                emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
-            elif window_type == 2:
-                create_employee(window_portal)
-            Singleton()
+            if Singleton.instance is None:
+                if window_type == 1:
+                    emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+                elif window_type == 2:
+                    create_employee(window_portal)
+                Singleton()
+
+            if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
+                if window_type == 1:
+                    emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+                elif window_type == 2:
+                    create_employee(window_portal)
+                Singleton()
+
 
     def __init__(self):
         if Singleton.instance is None:
@@ -63,6 +64,7 @@ def initiate_portal(window):
 
         emp_id_list = []
 
+        emp_list = []
         for emp in array_2d:
             emp_list.append(
                 Employee(emp[0], emp[1], emp[2], emp[3], emp[4], emp[5], emp[6], emp[7], emp[8], emp[9], emp[10],
@@ -84,6 +86,8 @@ def initiate_portal(window):
 
             entry_search.delete(0, END)
             entry_search.insert(0, listbox_id.get(ANCHOR))
+
+            # tkinter.Toplevel.winfo_exists(window_portal)
 
             for e in range(len(emp_list)):
                 if emp_list[e].read_id() == listbox_id.get(ANCHOR):
@@ -123,10 +127,13 @@ def initiate_portal(window):
         entry_search.bind("<KeyRelease>", check)
 
     def logout():
-
-        # fix - click log out and delete old info
-        window_portal.quit()
+        #emp_id_list = []
+        window_portal.destroy()
         window.deiconify()
+
+    # fix - click log out and delete old info
+    # window_portal.destroy()
+    # window_portal.update()
 
     def exit_app():
         window.quit()
