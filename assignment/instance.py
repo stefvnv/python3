@@ -121,10 +121,18 @@ class EmployeeDisplayer:
             new_picture = ""
 
             cur.execute(
-                "UPDATE Employee SET first_name = \'" + new_first_name + "\' WHERE emp_id = \'" + entry_id.get() + "\'")
+                "UPDATE Employee SET first_name = \'" + new_first_name + "\', surname = \'" + new_surname + "\',  gender = \'" + new_gender + "\', department = \'" + new_department + "\', WHERE emp_id = \'" + entry_id.get() + "\'")
+
+            con.commit()
+
             messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
 
-        # def delete_employee():
+        def delete_employee():
+            try:
+                cur.execute("Delete from Movie where title = \'" + entry_id.get() + "\'")
+                con.commit()
+            except:
+                print('Movie: ', title, ' does not exist in Database')
 
         def on_closing():
             self.window_employee.destroy()
@@ -177,7 +185,7 @@ class EmployeeDisplayer:
         label_gender.place(x=50, y=360)
 
         # ======Gender radio buttons======
-        rb_gender = IntVar()
+        rb_gender = StringVar()
 
         radiobutton_male = Radiobutton(self.window_employee, text="Male", variable=rb_gender, value=1,
                                        command=display_instance)
@@ -281,7 +289,7 @@ class EmployeeDisplayer:
         button_update.place(x=200, y=900)
 
         # ======Delete button======
-        button_delete = Button(self.window_employee, text="Delete")
+        button_delete = Button(self.window_employee, text="Delete", command=delete_employee)
         button_delete.place(x=480, y=900)
 
         display_instance()

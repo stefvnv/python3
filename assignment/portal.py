@@ -145,13 +145,8 @@ def initiate_portal(window):
         entry_search.bind("<KeyRelease>", check)
 
     def logout():
-        # emp_id_list = []
         window_portal.destroy()
         window.deiconify()
-
-    # fix - click log out and delete old info
-    # window_portal.destroy()
-    # window_portal.update()
 
     def exit_app():
         window.quit()
@@ -163,8 +158,8 @@ def initiate_portal(window):
     frame_header.place(x=0, y=0)
 
     # ======Live clock======
-    label_clock = Label(frame_header)
-    label_clock.place(x=1000, y=10)
+    label_clock = Label(frame_header, font=subtitle_font)
+    label_clock.place(x=880, y=20)
 
     # ======Title label======
     label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")
@@ -212,7 +207,9 @@ def initiate_portal(window):
     entry_position.place(x=300, y=400)
 
     # ======Picture label======
-    label_picture = Label(window_portal, borderwidth=4, relief="solid")
+    window_portal.image = PhotoImage(file="./images/user.png")
+
+    label_picture = Label(window_portal, relief="raised", width=200, height=250, image=window_portal.image)
     label_picture.place(x=600, y=200)
 
     # ======View employee button======

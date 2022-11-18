@@ -46,7 +46,7 @@ canvas.create_image(0, 0, image=background, anchor="nw")
 
 # ======Title text======
 canvas.create_text(640, 80, text="Employee Portal", font=title_font, fill="white")
-canvas.create_text(640, 200, text="Login", font=subtitle_font, fill="lightgreen")
+canvas.create_text(640, 200, text="Login", font=header_font, fill="lightgreen")
 
 # ======Username text======
 canvas.create_text(550, 300, text="Username", font=body_font, fill="white")

@@ -69,9 +69,9 @@ class EmployeeCreator:
         label_title = Label(frame_header, font=title_font, text="Employee Portal")
         label_title.place(x=10, y=0)
 
-        # ======Current Employee ID label======
-        label_current = Label(frame_header, font=subtitle_font)
-        label_current.place(x=485, y=20)
+        # ======Add New Employee label======
+        label_new = Label(frame_header, font=subtitle_font, text="Add New Employee")
+        label_new.place(x=440, y=20)
 
         # ======Employee ID label======
         label_id = Label(self.window_create, text="Employee ID:")
@@ -199,7 +199,9 @@ class EmployeeCreator:
         text_address.place(x=150, y=720)
 
         # ======Picture label======
-        label_picture = Label(self.window_create, relief="raised")
+        self.window_create.image = PhotoImage(file="./images/user.png")
+
+        label_picture = Label(self.window_create, relief="raised", image=self.window_create.image)
         label_picture.place(x=460, y=120)
 
         # ======Add button======
