@@ -104,7 +104,7 @@ class EmployeeDisplayer:
             current_employee = cur.fetchall()[index]
             print(current_employee)
 
-            #new_id = entry_id.get()
+            # new_id = entry_id.get()
             new_first_name = entry_first_name.get()
             new_surname = entry_surname.get()
             new_gender = rb_gender.get()
@@ -120,8 +120,8 @@ class EmployeeDisplayer:
             # complete
             new_picture = ""
 
-
-            cur.execute("UPDATE Employee SET first_name = \'" + new_first_name + "\'")
+            cur.execute(
+                "UPDATE Employee SET first_name = \'" + new_first_name + "\' WHERE emp_id = \'" + entry_id.get() + "\'")
             messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
 
         # def delete_employee():
@@ -260,7 +260,8 @@ class EmployeeDisplayer:
                                       command=display_instance)
         radiobutton_yes.place(x=450, y=640)
 
-        radiobutton_no = Radiobutton(self.window_employee, text="No", variable=rb_active, value=2, command=display_instance)
+        radiobutton_no = Radiobutton(self.window_employee, text="No", variable=rb_active, value=2,
+                                     command=display_instance)
         radiobutton_no.place(x=500, y=640)
 
         # ======Address label======

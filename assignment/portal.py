@@ -10,37 +10,53 @@ from database import *
 from create_employee import *
 
 # variables
-current_index = None
+current_index = -1
 emp_list = []
 emp_displayer = EmployeeDisplayer()
+emp_creator = EmployeeCreator()
 
 
 class Singleton:
     instance = None
 
     @staticmethod
-    def open_instance(window_portal, current, employee_list, window_type):
+    def open_instance(window_portal, current, employee_list):
         if Singleton.instance is None:
-
-            if window_type == 1:
-                if current_index is not None:
-                    emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
-                else:
-                    messagebox.showwarning("Warning", "An employee must be selected to proceed.")
-            elif window_type == 2:
-                create_employee(window_portal)
-            Singleton()
-
-        if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
-            if window_type == 1:
+            if current_index != -1:
                 emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
-            elif window_type == 2:
-                create_employee(window_portal)
-            Singleton()
+                Singleton()
+            else:
+                messagebox.showwarning("Warning", "An employee must be selected to proceed.")
+
+        else:
+            if current_index != -1:
+                if not tkinter.Toplevel.winfo_exists(emp_displayer.read_window(emp_displayer)):
+                    emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
+                    Singleton()
+                else:
+                    messagebox.showwarning("Warning", "An employee is already open.")
 
     def __init__(self):
         if Singleton.instance is None:
             Singleton.instance = self
+
+
+class SingletonTwo:
+    instance = None
+
+    @staticmethod
+    def open_instance(window_portal):
+        if SingletonTwo.instance is None:
+            emp_creator.create_employee(emp_creator, window_portal)
+            SingletonTwo()
+        else:
+            if not tkinter.Toplevel.winfo_exists(emp_creator.read_window(emp_creator)):
+                emp_creator.create_employee(emp_creator, window_portal)
+                SingletonTwo()
+
+    def __init__(self):
+        if SingletonTwo.instance is None:
+            SingletonTwo.instance = self
 
 
 # ADD ALL GUI STUFF INSIDE THIS METHOD
@@ -201,12 +217,12 @@ def initiate_portal(window):
 
     # ======View employee button======
     button_view_employee = Button(window_portal, text="View/Edit Full Employee Profile",
-                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list, 1))
+                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
     button_view_employee.place(x=200, y=600)
 
     # ======Add new employee button======
     button_add = Button(window_portal, text="Add New Employee",
-                        command=lambda: Singleton.open_instance(window_portal, 0, 0, 2))
+                        command=lambda: SingletonTwo.open_instance(window_portal))
     button_add.place(x=400, y=600)
 
     # ======Log out button======
