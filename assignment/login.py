@@ -45,35 +45,38 @@ canvas.pack(fill="both", expand=True)
 canvas.create_image(0, 0, image=background, anchor="nw")
 
 # ======Title text======
-canvas.create_text(640, 80, text="Employee Portal", font=title_font, fill="white")
+canvas.create_text(640, 60, text="Employee Portal", font=title_font, fill="white")
+canvas.create_text(640, 100, text="Employee Management System", font=header_font, fill="darkgreen")
 canvas.create_text(640, 200, text="Login", font=header_font, fill="lightgreen")
 
 # ======Username text======
-canvas.create_text(550, 300, text="Username", font=body_font, fill="white")
+canvas.create_text(600, 280, text="Username", font=body_font, fill="white")
 
 # ======Username entry box======
-entry_username = Entry(window, width=20)
+entry_username = Entry(window, width=18, font=body_font)
 entry_username.insert(END, '')
 entry_username.focus_set()
-entry_username.place(x=600, y=300)
+entry_username.place(x=560, y=300)
 
 # ======Password text======
-canvas.create_text(550, 380, text="Password", font=body_font, fill="white")
+canvas.create_text(600, 360, text="Password", font=body_font, fill="white")
 
 # ======Password entry box======
 password = StringVar()
 
-entry_password = Entry(window, width=20, textvariable=password, show="•")
+entry_password = Entry(window, width=18, font=body_font, textvariable=password, show="•")
 entry_password.insert(END, '')
-entry_password.place(x=600, y=380)
+entry_password.place(x=560, y=380)
 
 # ======Forgot password checkbox======
 var_checkbutton = IntVar()
 checkbutton_show_password = Checkbutton(window, text="Show password", variable=var_checkbutton, command=show_password)
-checkbutton_show_password.place(x=600, y=430)
+checkbutton_show_password.place(x=740, y=400)
 
 # ======Login button======
-button_login = Button(window, text="Login", fg="black", font=("arial", 10, "bold"), command=login)
-button_login.place(x=620, y=500)
+button_login = Button(window, text="Login", width=10, height=1, fg="lightgreen", bg="#435634", activebackground="#8d5d53",
+                      font=button_font, command=login)
+button_login.place(x=575, y=480)
+
 
 mainloop()

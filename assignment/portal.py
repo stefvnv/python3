@@ -105,8 +105,6 @@ def initiate_portal(window):
             entry_search.delete(0, END)
             entry_search.insert(0, listbox_id.get(ANCHOR))
 
-            # tkinter.Toplevel.winfo_exists(window_portal)
-
             for e in range(len(emp_list)):
                 if emp_list[e].read_id() == listbox_id.get(ANCHOR):
                     current_index = e
@@ -159,7 +157,7 @@ def initiate_portal(window):
 
     # ======Live clock======
     label_clock = Label(frame_header, font=subtitle_font)
-    label_clock.place(x=880, y=20)
+    label_clock.place(x=840, y=20)
 
     # ======Title label======
     label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")

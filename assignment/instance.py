@@ -32,6 +32,7 @@ class EmployeeDisplayer:
 
             entry_id.delete(0, END)
             entry_id.insert(END, emp_data[index].read_id())
+            entry_id.config(state="disabled")
 
             entry_first_name.delete(0, END)
             entry_first_name.insert(END, emp_data[index].read_first_name())
@@ -41,11 +42,10 @@ class EmployeeDisplayer:
 
             # fix - not to update everything (separate method)
             if emp_data[index].read_gender() == "Male":
-                rb_gender.set(1)
+                rb_gender.set("Male")
             else:
-                rb_gender.set(2)
+                rb_gender.set("Female")
 
-            # to do department
             if emp_data[index].read_department() == "Business Development":
                 department.set("Business Development")
             elif emp_data[index].read_department() == "Services":
@@ -86,10 +86,10 @@ class EmployeeDisplayer:
             spinbox_salary.insert(END, emp_data[index].read_salary())
 
             # fix - not to update everything (separate method)
-            if emp_data[index].read_active():
-                rb_active.set(1)
+            if emp_data[index].read_active() == 1:
+                rb_active.set("Yes")
             else:
-                rb_active.set(2)
+                rb_active.set("No")
 
             text_address.insert(END, emp_data[index].read_address())
 
@@ -99,7 +99,6 @@ class EmployeeDisplayer:
             label_picture.config(image=self.window_employee.image)
 
         def update_employee():
-
             cur.execute("SELECT * FROM Employee")
             current_employee = cur.fetchall()[index]
             print(current_employee)
@@ -121,18 +120,20 @@ class EmployeeDisplayer:
             new_picture = ""
 
             cur.execute(
-                "UPDATE Employee SET first_name = (\'" + new_first_name + "\'), surname = (\'" + new_surname + "\'),  gender = (\'" + new_gender + "\'), department = (\'" + new_department + "\'), position = (\'" + new_position + "\') WHERE emp_id = \'" + entry_id.get() + "\'")
-
+                "UPDATE Employee SET first_name = (\'" + new_first_name + "\'), surname = (\'" + new_surname + "\'),  gender = (\'" + new_gender + "\'), department = (\'" + new_department + "\'), position = (\'" + new_position + "\'), date_of_birth = (\'" + new_dob + "\'), email = (\'" + new_email + "\'), contact = (\'" + new_contact + "\'), salary = (\'" + new_salary + "\'), active = (\'" + new_active + "\'), address = (\'" + new_address + "\') WHERE emp_id = \'" + entry_id.get() + "\'")
             con.commit()
+
 
             messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
 
         def delete_employee():
-            try:
-                cur.execute("Delete from Movie where title = \'" + entry_id.get() + "\'")
-                con.commit()
-            except:
-                print('Movie: ', title, ' does not exist in Database')
+            cur.execute("DELETE FROM Employee WHERE emp_id = \'" + entry_id.get() + "\'")
+            con.commit()
+
+            messagebox.showinfo("Employee Deleted", "Current employee has been deleted from the database successfully.")
+            self.window_employee.destroy()
+
+            window_portal.fill()
 
         def on_closing():
             self.window_employee.destroy()
@@ -187,12 +188,10 @@ class EmployeeDisplayer:
         # ======Gender radio buttons======
         rb_gender = StringVar()
 
-        radiobutton_male = Radiobutton(self.window_employee, text="Male", variable=rb_gender, value=1,
-                                       command=display_instance)
+        radiobutton_male = Radiobutton(self.window_employee, text="Male", variable=rb_gender, value="Male")
         radiobutton_male.place(x=150, y=360)
 
-        radiobutton_female = Radiobutton(self.window_employee, text="Female", variable=rb_gender, value=2,
-                                         command=display_instance)
+        radiobutton_female = Radiobutton(self.window_employee, text="Female", variable=rb_gender, value="Female")
         radiobutton_female.place(x=260, y=360)
 
         # ======Department label======
@@ -262,14 +261,12 @@ class EmployeeDisplayer:
         label_active.place(x=380, y=640)
 
         # ======Active radio buttons======
-        rb_active = IntVar()
+        rb_active = StringVar()
 
-        radiobutton_yes = Radiobutton(self.window_employee, text="Yes", variable=rb_active, value=1,
-                                      command=display_instance)
+        radiobutton_yes = Radiobutton(self.window_employee, text="Yes", variable=rb_active, value="Yes")
         radiobutton_yes.place(x=450, y=640)
 
-        radiobutton_no = Radiobutton(self.window_employee, text="No", variable=rb_active, value=2,
-                                     command=display_instance)
+        radiobutton_no = Radiobutton(self.window_employee, text="No", variable=rb_active, value="No")
         radiobutton_no.place(x=500, y=640)
 
         # ======Address label======
