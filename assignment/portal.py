@@ -12,8 +12,9 @@ from create_employee import *
 # variables
 current_index = -1
 emp_list = []
-emp_displayer = EmployeeDisplayer()
-emp_creator = EmployeeCreator()
+global emp_displayer
+global emp_creator
+global search
 
 
 class Singleton:
@@ -46,6 +47,7 @@ class SingletonTwo:
 
     @staticmethod
     def open_instance(window_portal):
+        global search
         if SingletonTwo.instance is None:
             emp_creator.create_employee(emp_creator, window_portal)
             SingletonTwo()
@@ -61,12 +63,14 @@ class SingletonTwo:
 
 # ADD ALL GUI STUFF INSIDE THIS METHOD
 def initiate_portal(window):
+    global emp_creator, search, emp_displayer
     """Initiates the GUI"""
 
     window_portal = Toplevel(window)
     window_portal.geometry("1280x720")
     window_portal.title("Employee Portal - Employee Management System")
     window_portal.resizable(False, False)
+
 
     def live_clock():
         time_string = strftime("%A, %d %B, %H:%M:%S %p")
@@ -77,7 +81,10 @@ def initiate_portal(window):
         """"""
         global emp_list
 
+        # getting data from database
         cur.execute("SELECT * FROM Employee")
+
+        # database to 2d array
         array_2d = cur.fetchall()
 
         emp_id_list = []
@@ -99,7 +106,7 @@ def initiate_portal(window):
 
         def fill(e):
             """Populate entry boxes and image label based on ID clicked in listbox"""
-
+            print(e)
             global current_index
 
             entry_search.delete(0, END)
@@ -118,11 +125,12 @@ def initiate_portal(window):
             entry_position.delete(0, END)
             entry_position.insert(END, emp_list[current_index].read_position())
 
+            # TODO: do conversion to byte after getting
             # render and insert image
             img_byte = BytesIO(emp_list[current_index].read_picture())
             window_portal.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
             label_picture.config(image=window_portal.image)
-
+        # fill(1)
         def check(e):
             typed = entry_search.get()
             if typed == '':
@@ -141,6 +149,9 @@ def initiate_portal(window):
 
         listbox_id.bind("<<ListboxSelect>>", fill)
         entry_search.bind("<KeyRelease>", check)
+
+    emp_creator = EmployeeCreator(window_portal, search)
+    emp_displayer = EmployeeDisplayer(window_portal, search)
 
     def logout():
         window_portal.destroy()

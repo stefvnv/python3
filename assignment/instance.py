@@ -8,11 +8,15 @@ from tkcalendar import DateEntry
 from fonts import *
 from database import *
 
+global parent_update
+
 
 class EmployeeDisplayer:
 
-    def __init__(self):
+    def __init__(self, parent, parent_update_function):
         self.__window_employee = 0
+        global parent_update
+        parent_update = parent_update_function
 
     @staticmethod
     def read_window(self):
@@ -99,6 +103,7 @@ class EmployeeDisplayer:
             label_picture.config(image=self.window_employee.image)
 
         def update_employee():
+            global parent_update
             cur.execute("SELECT * FROM Employee")
             current_employee = cur.fetchall()[index]
             print(current_employee)
@@ -123,17 +128,18 @@ class EmployeeDisplayer:
                 "UPDATE Employee SET first_name = (\'" + new_first_name + "\'), surname = (\'" + new_surname + "\'),  gender = (\'" + new_gender + "\'), department = (\'" + new_department + "\'), position = (\'" + new_position + "\'), date_of_birth = (\'" + new_dob + "\'), email = (\'" + new_email + "\'), contact = (\'" + new_contact + "\'), salary = (\'" + new_salary + "\'), active = (\'" + new_active + "\'), address = (\'" + new_address + "\') WHERE emp_id = \'" + entry_id.get() + "\'")
             con.commit()
 
-
             messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
+            parent_update()
 
         def delete_employee():
+            global parent_update
             cur.execute("DELETE FROM Employee WHERE emp_id = \'" + entry_id.get() + "\'")
             con.commit()
 
             messagebox.showinfo("Employee Deleted", "Current employee has been deleted from the database successfully.")
             self.window_employee.destroy()
 
-            window_portal.fill()
+            parent_update()
 
         def on_closing():
             self.window_employee.destroy()

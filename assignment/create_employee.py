@@ -10,10 +10,15 @@ from Employee import *
 from fonts import *
 from database import *
 
+global parent_search
+
 
 class EmployeeCreator:
-    def __init__(self):
+
+    def __init__(self, parent_in, parent_update):
+        global parent_search
         self.__window_create = 0
+        parent_search = parent_update
 
     @staticmethod
     def read_window(self):
@@ -29,6 +34,8 @@ class EmployeeCreator:
 
         # ============ METHODS ============
         def add_to_database():
+            global parent_search
+
             new_id = entry_id.get()
             new_first_name = entry_first_name.get()
             new_surname = entry_surname.get()
@@ -36,6 +43,7 @@ class EmployeeCreator:
             new_department = department.get()
             new_position = entry_position.get()
             new_dob = date_entry_dob.get()
+            new_start_date = "01/01/1991"
             new_email = entry_email.get()
             new_contact = entry_contact.get()
             new_salary = spinbox_salary.get()
@@ -43,16 +51,19 @@ class EmployeeCreator:
             new_address = text_address.get("1.0", END)
 
             # complete
-            new_picture = ""
+            new_picture = "null"
 
             new_employee = [
-                (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob, new_email,
+                (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob, new_start_date,
+                 new_email,
                  new_contact, new_salary, new_active, new_address, new_picture)]
 
             cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
             con.commit()
 
             messagebox.showinfo("Employee Added", "Employee added to database successfully.")
+            print("testing nipple")
+            parent_search()
 
         def on_closing():
             self.window_create.destroy()
