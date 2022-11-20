@@ -71,9 +71,8 @@ def initiate_portal(window):
     window_portal.title("Employee Portal - Employee Management System")
     window_portal.resizable(False, False)
 
-
     def live_clock():
-        time_string = strftime("%A, %d %B, %H:%M:%S %p")
+        time_string = strftime("%H:%M:%S %p,\n%A, %d %B, ")
         label_clock.config(text=time_string)
         label_clock.after(1000, live_clock)
 
@@ -130,7 +129,7 @@ def initiate_portal(window):
             img_byte = BytesIO(emp_list[current_index].read_picture())
             window_portal.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
             label_picture.config(image=window_portal.image)
-        # fill(1)
+
         def check(e):
             typed = entry_search.get()
             if typed == '':
@@ -167,8 +166,8 @@ def initiate_portal(window):
     frame_header.place(x=0, y=0)
 
     # ======Live clock======
-    label_clock = Label(frame_header, font=subtitle_font)
-    label_clock.place(x=840, y=20)
+    label_clock = Label(frame_header, font=subtitle_font, anchor="e")
+    label_clock.place(x=820, y=20)
 
     # ======Title label======
     label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")

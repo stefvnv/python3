@@ -1,7 +1,7 @@
 import contextlib
 from tkinter import *
 from io import BytesIO
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
@@ -69,6 +69,16 @@ class EmployeeCreator:
             self.window_create.destroy()
 
         self.window_create.protocol("WM_DELETE_WINDOW", on_closing)
+
+        def upload_img():
+            f_types = [('Jpg Files', '*.jpg')]
+            filename = filedialog.askopenfilename(filetypes=f_types)
+            self.window_create.image = ImageTk.PhotoImage(file=filename)
+
+            label_picture.config(image=self.window_create.image, width=200, height=250)
+
+            # = self.window_create.image
+
 
         # ============ GUI ============
 
@@ -214,6 +224,10 @@ class EmployeeCreator:
 
         label_picture = Label(self.window_create, relief="raised", image=self.window_create.image)
         label_picture.place(x=460, y=120)
+
+        # ======Browse button======
+        button_browse = Button(self.window_create, text="Browse", command=upload_img)
+        button_browse.place(x=460, y=300)
 
         # ======Add button======
         button_add = Button(self.window_create, text="Add", command=add_to_database)
