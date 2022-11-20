@@ -15,6 +15,7 @@ emp_list = []
 global emp_displayer
 global emp_creator
 global search
+global set_default_entries
 
 
 class Singleton:
@@ -61,10 +62,10 @@ class SingletonTwo:
             SingletonTwo.instance = self
 
 
-# ADD ALL GUI STUFF INSIDE THIS METHOD
 def initiate_portal(window):
-    global emp_creator, search, emp_displayer
     """Initiates the GUI"""
+
+    global emp_creator, search, emp_displayer, set_default_entries
 
     window_portal = Toplevel(window)
     window_portal.geometry("1280x720")
@@ -75,6 +76,13 @@ def initiate_portal(window):
         time_string = strftime("%H:%M:%S %p,\n%A, %d %B, ")
         label_clock.config(text=time_string)
         label_clock.after(1000, live_clock)
+
+    def set_default_entries():
+        entry_search.delete(0, END)
+        entry_first_name.delete(0, END)
+        entry_surname.delete(0, END)
+        entry_position.delete(0, END)
+        label_picture.config(image=window_portal.default)
 
     def search():
         """"""
@@ -125,6 +133,7 @@ def initiate_portal(window):
             entry_position.insert(END, emp_list[current_index].read_position())
 
             # TODO: do conversion to byte after getting
+
             # render and insert image
             img_byte = BytesIO(emp_list[current_index].read_picture())
             window_portal.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
@@ -150,7 +159,7 @@ def initiate_portal(window):
         entry_search.bind("<KeyRelease>", check)
 
     emp_creator = EmployeeCreator(window_portal, search)
-    emp_displayer = EmployeeDisplayer(window_portal, search)
+    emp_displayer = EmployeeDisplayer(window_portal, search, set_default_entries)
 
     def logout():
         window_portal.destroy()
@@ -215,9 +224,9 @@ def initiate_portal(window):
     entry_position.place(x=300, y=400)
 
     # ======Picture label======
-    window_portal.image = PhotoImage(file="./images/user.png")
+    window_portal.default = PhotoImage(file="./images/user.png")
 
-    label_picture = Label(window_portal, relief="raised", width=200, height=250, image=window_portal.image)
+    label_picture = Label(window_portal, relief="raised", width=200, height=250, image=window_portal.default)
     label_picture.place(x=600, y=200)
 
     # ======View employee button======

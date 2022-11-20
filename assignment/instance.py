@@ -8,15 +8,16 @@ from tkcalendar import DateEntry
 from fonts import *
 from database import *
 
-global parent_update
+global parent_update, default_parent_state
 
 
 class EmployeeDisplayer:
 
-    def __init__(self, parent, parent_update_function):
+    def __init__(self, parent, parent_update_function, parent_default_entries):
         self.__window_employee = 0
-        global parent_update
+        global parent_update, default_parent_state
         parent_update = parent_update_function
+        default_parent_state = parent_default_entries
 
     @staticmethod
     def read_window(self):
@@ -130,6 +131,7 @@ class EmployeeDisplayer:
 
             messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
             parent_update()
+            default_parent_state()
 
         def delete_employee():
             global parent_update
@@ -140,6 +142,7 @@ class EmployeeDisplayer:
             self.window_employee.destroy()
 
             parent_update()
+            default_parent_state()
 
         def on_closing():
             self.window_employee.destroy()
@@ -295,4 +298,5 @@ class EmployeeDisplayer:
         button_delete = Button(self.window_employee, text="Delete", command=delete_employee)
         button_delete.place(x=480, y=900)
 
+        # start method
         display_instance()

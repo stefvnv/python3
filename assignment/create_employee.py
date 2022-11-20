@@ -1,4 +1,6 @@
 import contextlib
+import random
+from random import randint
 from tkinter import *
 from io import BytesIO
 from tkinter import messagebox, filedialog
@@ -11,6 +13,8 @@ from fonts import *
 from database import *
 
 global parent_search
+global blob_data
+global new_picture
 
 
 class EmployeeCreator:
@@ -33,8 +37,15 @@ class EmployeeCreator:
         self.window_create.config(bg="#B0B6A1")
 
         # ============ METHODS ============
+        def display_id():
+            fixed_digits = 4
+            random_id = str(random.randrange(1000, 9999, fixed_digits))
+
+            entry_id.insert(END, random_id)
+            entry_id.config(state="disabled")
+
         def add_to_database():
-            global parent_search
+            global parent_search, blob_data, new_picture
 
             new_id = entry_id.get()
             new_first_name = entry_first_name.get()
@@ -43,26 +54,33 @@ class EmployeeCreator:
             new_department = department.get()
             new_position = entry_position.get()
             new_dob = date_entry_dob.get()
-            new_start_date = "01/01/1991"
+            new_start_date = date_entry_start_date.get()
             new_email = entry_email.get()
             new_contact = entry_contact.get()
             new_salary = spinbox_salary.get()
             new_active = rb_active.get()
             new_address = text_address.get("1.0", END)
 
-            # complete
-            new_picture = "null"
+            try:
+                new_picture = blob_data
+                new_employee = [
+                    (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob,
+                     new_start_date,
+                     new_email,
+                     new_contact, new_salary, new_active, new_address, new_picture)]
 
-            new_employee = [
-                (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob, new_start_date,
-                 new_email,
-                 new_contact, new_salary, new_active, new_address, new_picture)]
+                try:
+                    cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
+                except sqlite3.IntegrityError:
+                    messagebox.showinfo("Error", "ID Must be unique")
+                else:
+                    messagebox.showinfo("Employee Added", "Employee added to database successfully.")
+                    on_closing()
 
-            cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
+            except NameError:
+                messagebox.showinfo("Error", "Must add a picture")
+
             con.commit()
-
-            messagebox.showinfo("Employee Added", "Employee added to database successfully.")
-            print("testing nipple")
             parent_search()
 
         def on_closing():
@@ -71,14 +89,12 @@ class EmployeeCreator:
         self.window_create.protocol("WM_DELETE_WINDOW", on_closing)
 
         def upload_img():
+            global blob_data
             f_types = [('Jpg Files', '*.jpg')]
             filename = filedialog.askopenfilename(filetypes=f_types)
+            blob_data = filename
             self.window_create.image = ImageTk.PhotoImage(file=filename)
-
             label_picture.config(image=self.window_create.image, width=200, height=250)
-
-            # = self.window_create.image
-
 
         # ============ GUI ============
 
@@ -232,3 +248,6 @@ class EmployeeCreator:
         # ======Add button======
         button_add = Button(self.window_create, text="Add", command=add_to_database)
         button_add.place(x=340, y=900)
+
+        # start method
+        display_id()
