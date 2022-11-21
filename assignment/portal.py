@@ -182,6 +182,24 @@ def initiate_portal(window):
     label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")
     label_title.place(x=10, y=10)
 
+    # ======View employee button======
+    button_view_employee = Button(window_portal, text="Manage Employee", font="body_font", bg="#22311d", fg="white",
+                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
+    button_view_employee.place(x=0, y=80)
+
+    # ======Add new employee button======
+    button_add = Button(window_portal, text="Add Employee", font="body_font", bg="#22311d", fg="white",
+                        command=lambda: SingletonTwo.open_instance(window_portal))
+    button_add.place(x=320, y=80)
+
+    # ======Log out button======
+    button_log_out = Button(window_portal, text="Logout", font="body_font", bg="#22311d", fg="white", command=logout)
+    button_log_out.place(x=640, y=80)
+
+    # ======Exit button======
+    button_exit = Button(window_portal, text="Exit", font="body_font", bg="#22311d", fg="white", command=exit_app)
+    button_exit.place(x=960, y=80)
+
     # ======Search Employee label======
     label_id = Label(window_portal, text="Search (by Employee ID)")
     label_id.place(x=100, y=80)
@@ -228,24 +246,6 @@ def initiate_portal(window):
 
     label_picture = Label(window_portal, relief="raised", width=200, height=250, image=window_portal.default)
     label_picture.place(x=600, y=200)
-
-    # ======View employee button======
-    button_view_employee = Button(window_portal, text="View/Edit Full Employee Profile",
-                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
-    button_view_employee.place(x=200, y=600)
-
-    # ======Add new employee button======
-    button_add = Button(window_portal, text="Add New Employee",
-                        command=lambda: SingletonTwo.open_instance(window_portal))
-    button_add.place(x=400, y=600)
-
-    # ======Log out button======
-    button_log_out = Button(window_portal, text="Log out", command=logout)
-    button_log_out.place(x=600, y=600)
-
-    # ======Exit button======
-    button_exit = Button(window_portal, text="Exit", command=exit_app)
-    button_exit.place(x=800, y=600)
 
     # start methods
     search()
