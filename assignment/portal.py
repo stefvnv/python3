@@ -73,7 +73,7 @@ def initiate_portal(window):
     window_portal.resizable(False, False)
 
     def live_clock():
-        time_string = strftime("%H:%M:%S %p,\n%A, %d %B, ")
+        time_string = strftime("%H:%M:%S,\n%A, %d %B")
         label_clock.config(text=time_string)
         label_clock.after(1000, live_clock)
 
@@ -176,76 +176,76 @@ def initiate_portal(window):
 
     # ======Live clock======
     label_clock = Label(frame_header, font=subtitle_font, anchor="e")
-    label_clock.place(x=820, y=20)
+    label_clock.place(x=860, y=0)
 
     # ======Title label======
     label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")
     label_title.place(x=10, y=10)
 
     # ======View employee button======
-    button_view_employee = Button(window_portal, text="Manage Employee", font="body_font", bg="#22311d", fg="white",
+    button_view_employee = Button(window_portal, text="Manage Employee", font="body_font", width=30, bg="#22311d", fg="white",
                                   command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
     button_view_employee.place(x=0, y=80)
 
     # ======Add new employee button======
-    button_add = Button(window_portal, text="Add Employee", font="body_font", bg="#22311d", fg="white",
+    button_add = Button(window_portal, text="Add Employee", font="body_font", width=30, bg="#22311d", fg="white",
                         command=lambda: SingletonTwo.open_instance(window_portal))
     button_add.place(x=320, y=80)
 
     # ======Log out button======
-    button_log_out = Button(window_portal, text="Logout", font="body_font", bg="#22311d", fg="white", command=logout)
+    button_log_out = Button(window_portal, text="Logout", font="body_font", width=30, bg="#22311d", fg="white", command=logout)
     button_log_out.place(x=640, y=80)
 
     # ======Exit button======
-    button_exit = Button(window_portal, text="Exit", font="body_font", bg="#22311d", fg="white", command=exit_app)
+    button_exit = Button(window_portal, text="Exit", font="body_font", width=30, bg="#22311d", fg="white", command=exit_app)
     button_exit.place(x=960, y=80)
 
     # ======Search Employee label======
-    label_id = Label(window_portal, text="Search (by Employee ID)")
-    label_id.place(x=100, y=80)
+    label_id = Label(window_portal, text="Search (by ID)", font="body_font")
+    label_id.place(x=100, y=200)
 
     # ======Search entry box======
-    entry_search = Entry(window_portal, width=40)
+    entry_search = Entry(window_portal, width=40, font="body_font")
     entry_search.insert(END, '')
     entry_search.focus_set()
-    entry_search.place(x=300, y=80)
+    entry_search.place(x=300, y=200)
 
     # ======Employee ID listbox======
-    listbox_id = Listbox(window_portal, width=40, height=5)
+    listbox_id = Listbox(window_portal, width=40, height=5, font="body_font")
     listbox_id.place(x=300, y=120)
 
     # ======First name label======
-    label_first_name = Label(window_portal, text="First Name")
-    label_first_name.place(x=100, y=240)
+    label_first_name = Label(window_portal, text="First Name", font="body_font")
+    label_first_name.place(x=400, y=240)
 
     # ======First name entry box======
-    entry_first_name = Entry(window_portal, width=40)
+    entry_first_name = Entry(window_portal, width=40, font="body_font")
     entry_first_name.insert(END, '')
-    entry_first_name.place(x=300, y=240)
+    entry_first_name.place(x=500, y=240)
 
     # ======Surname label======
-    label_surname = Label(window_portal, text="Surname")
-    label_surname.place(x=100, y=320)
+    label_surname = Label(window_portal, text="Surname", font="body_font")
+    label_surname.place(x=400, y=320)
 
     # ======Surname entry box======
-    entry_surname = Entry(window_portal, width=40)
+    entry_surname = Entry(window_portal, width=40, font="body_font")
     entry_surname.insert(END, '')
-    entry_surname.place(x=300, y=320)
+    entry_surname.place(x=500, y=320)
 
     # ======Position label======
-    label_position = Label(window_portal, text="Position")
-    label_position.place(x=100, y=400)
+    label_position = Label(window_portal, text="Position", font="body_font")
+    label_position.place(x=400, y=400)
 
     # ======Position entry box======
-    entry_position = Entry(window_portal, width=40)
+    entry_position = Entry(window_portal, width=40, font="body_font")
     entry_position.insert(END, '')
-    entry_position.place(x=300, y=400)
+    entry_position.place(x=500, y=400)
 
     # ======Picture label======
     window_portal.default = PhotoImage(file="./images/user.png")
 
     label_picture = Label(window_portal, relief="raised", width=200, height=250, image=window_portal.default)
-    label_picture.place(x=600, y=200)
+    label_picture.place(x=700, y=200)
 
     # start methods
     search()

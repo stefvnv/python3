@@ -3,7 +3,6 @@ import sqlite3
 con = sqlite3.connect("../employees.db")
 cur = con.cursor()
 
-
 try:
     cur.execute(
         "CREATE TABLE Employee(emp_id INTEGER(10) PRIMARY KEY, first_name VARCHAR(45), surname VARCHAR(45), "
@@ -23,5 +22,3 @@ try:
 
 except:
     print("Employees database has not been created as it already exists.")
-
-
