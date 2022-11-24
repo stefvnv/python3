@@ -43,7 +43,6 @@ def login():
 
         # removes login window
         window.withdraw()
-        messagebox.showinfo("Success", "You have successfully logged in to Employee Portal.")
     else:
         messagebox.showerror("Error", "The login information entered is incorrect.\nTry again.")
 
