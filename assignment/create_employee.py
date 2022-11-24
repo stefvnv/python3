@@ -1,17 +1,21 @@
-import contextlib
-import random
-from random import randint
-from tkinter import *
-from io import BytesIO
-from tkinter import messagebox, filedialog
+"""
+Employee Portal
+    create_employee.py
 
+Stefana Chiritescu
+"""
+
+import random
+
+from tkinter import *
+from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 
-from Employee import *
 from fonts import *
 from database import *
 
+# global variables
 global parent_search
 global blob_data
 global new_picture
@@ -26,18 +30,25 @@ class EmployeeCreator:
 
     @staticmethod
     def read_window(self):
+        """Returns current window"""
+
         return self.window_create
 
     @staticmethod
     def create_employee(self, window_portal):
+        """Initializes GUI for adding new employee as toplevel"""
+
+        # GUI settings
         self.window_create = Toplevel(window_portal)
         self.window_create.geometry("720x1000")
         self.window_create.title("Employee Portal - Employee Management System | Add New Employee")
         self.window_create.resizable(False, False)
-        self.window_create.config(bg="#B0B6A1")
+        self.window_create.config(bg="#B0B6A1", highlightbackground="black", highlightthickness=4)
 
         # ============ METHODS ============
         def display_id():
+            """Inserts random number in ID entry field"""
+
             fixed_digits = 4
             random_id = str(random.randrange(1000, 9999, fixed_digits))
 
@@ -45,8 +56,12 @@ class EmployeeCreator:
             entry_id.config(state="disabled")
 
         def add_to_database():
+            """Gets information from window and inserts to database table as new employee"""
+
+            # global variables
             global parent_search, blob_data, new_picture
 
+            # gets content from entry fields, radio buttons, date entry, spinbox and text box
             new_id = entry_id.get()
             new_first_name = entry_first_name.get()
             new_surname = entry_surname.get()
@@ -63,13 +78,14 @@ class EmployeeCreator:
 
             try:
                 new_picture = blob_data
+
+                # stores information in new employee array
                 new_employee = [
                     (new_id, new_first_name, new_surname, new_gender, new_department, new_position, new_dob,
-                     new_start_date,
-                     new_email,
-                     new_contact, new_salary, new_active, new_address, new_picture)]
+                     new_start_date, new_email, new_contact, new_salary, new_active, new_address, new_picture)]
 
                 try:
+                    # [SQL] inserts new employee array into database
                     cur.executemany("INSERT into Employee VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", new_employee)
                 except sqlite3.IntegrityError:
                     messagebox.showinfo("Error", "ID Must be unique")
@@ -84,19 +100,26 @@ class EmployeeCreator:
             parent_search()
 
         def on_closing():
-            self.window_create.destroy()
+            """Destroys current window when window is closed (X)"""
 
+            self.window_create.destroy()
         self.window_create.protocol("WM_DELETE_WINDOW", on_closing)
 
         def upload_img():
+            """Opens file explorer to select image, resizes and inserts it into label"""
+
+            # global image
             global blob_data
+
+            # accept jpg files only
             f_types = [('Jpg Files', '*.jpg')]
+
+            # store image selected from file explorer into filename
             filename = filedialog.askopenfilename(filetypes=f_types)
             blob_data = filename
-            #self.window_create.image = ImageTk.PhotoImage(file=filename)
 
+            # render and insert image
             self.window_create.image = ImageTk.PhotoImage(Image.open(filename).resize((200, 250), Image.ANTIALIAS))
-
             label_picture.config(image=self.window_create.image, width=200, height=250)
 
         # ============ GUI ============
@@ -250,13 +273,14 @@ class EmployeeCreator:
         label_picture.place(x=450, y=120)
 
         # ======Browse button======
-        button_browse = Button(self.window_create, text="Browse", command=upload_img, width=10, bg="#22311d",
-                               fg="white")
+        button_browse = Button(self.window_create, text="Browse", command=upload_img, width=10, bg="#1e453e",
+                               fg="white", activebackground="#306844")
         button_browse.place(x=510, y=380)
 
         # ======Add button======
-        button_add = Button(self.window_create, text="Add", command=add_to_database, width=10, bg="#22311d", fg="white")
-        button_add.place(x=330, y=900)
+        button_add = Button(self.window_create, text="Add", command=add_to_database, width=10, font=12, bg="#1e453e",
+                            fg="white", activebackground="#306844")
+        button_add.place(x=320, y=900)
 
         # start method
         display_id()

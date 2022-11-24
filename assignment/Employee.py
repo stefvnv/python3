@@ -1,3 +1,11 @@
+"""
+Employee Portal
+    Employee.py
+
+Stefana Chiritescu
+"""
+
+
 class Employee:
     def __init__(self, emp_id, first_name, surname, gender, department, position, date_of_birth, start_date, email,
                  contact, salary, active, address, picture):

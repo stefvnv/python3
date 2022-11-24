@@ -1,23 +1,27 @@
+"""
+Employee Portal
+    portal.py
+
+Stefana Chiritescu
+"""
+
 import tkinter
-from tkinter import *
+
 from time import strftime
-from tkinter import Tk, messagebox
 from instance import *
 from Employee import *
 from io import BytesIO
-from PIL import Image, ImageTk
-from database import *
 from create_employee import *
 from fonts import *
 
-# variables
+# global variables
 global emp_displayer
 global emp_creator
 global search
 global set_default_entries
 
-emp_list = []
 current_index = -1
+emp_list = []
 
 
 class Singleton:
@@ -25,6 +29,8 @@ class Singleton:
 
     @staticmethod
     def open_instance(window_portal, current, employee_list):
+        """Opens one Singleton instance of current employee window"""
+
         if Singleton.instance is None:
             if current_index != -1:
                 emp_displayer.display_employee(emp_displayer, window_portal, employee_list, current)
@@ -50,7 +56,10 @@ class SingletonTwo:
 
     @staticmethod
     def open_instance(window_portal):
+        """Opens one Singleton instance of new employee window"""
+
         global search
+
         if SingletonTwo.instance is None:
             emp_creator.create_employee(emp_creator, window_portal)
             SingletonTwo()
@@ -64,203 +73,247 @@ class SingletonTwo:
             SingletonTwo.instance = self
 
 
-def initiate_portal(window):
-    """Initiates the GUI"""
-    global emp_creator, search, emp_displayer, set_default_entries
+class Portal:
+    def __init__(self):
+        self.__window_create = 0
 
-    background = PhotoImage(file="images/background_portal.png")
+    @staticmethod
+    def read_window(self):
+        """Returns current window"""
 
-    window_portal = Toplevel(window)
-    window_portal.geometry("1280x720")
-    window_portal.title("Employee Portal - Employee Management System")
-    window_portal.resizable(False, False)
+        return self.window_create
 
-    def live_clock():
-        time_string = strftime("%H:%M:%S,\n%A, %d %B")
-        label_clock.config(text=time_string)
-        label_clock.after(1000, live_clock)
+    @staticmethod
+    def initiate_portal(self, window):
+        """Initiates the Employee Portal GUI"""
 
-    def set_default_entries():
-        entry_search.delete(0, END)
-        entry_first_name.delete(0, END)
-        entry_surname.delete(0, END)
-        entry_position.delete(0, END)
-        label_picture.config(image=window_portal.default)
+        # global variables
+        global emp_creator, search, emp_displayer, set_default_entries
 
-    def search():
-        """"""
-        global emp_list
+        # GUI settings
+        self.window_portal = Toplevel(window)
+        self.window_portal.geometry("1280x720")
+        self.window_portal.title("Employee Portal - Employee Management System")
+        self.window_portal.resizable(False, False)
 
-        # getting data from database
-        cur.execute("SELECT * FROM Employee")
+        self.background = PhotoImage(file="images/background_portal.png")
 
-        # database to 2d array
-        array_2d = cur.fetchall()
+        def live_clock():
+            """Gets current time and date, stores in label and refreshes every 1000ms"""
 
-        emp_id_list = []
+            time_string = strftime("%H:%M:%S,\n%A, %d %B")
+            label_clock.config(text=time_string)
+            label_clock.after(1000, live_clock)
 
-        emp_list = []
-        for emp in array_2d:
-            emp_list.append(
-                Employee(emp[0], emp[1], emp[2], emp[3], emp[4], emp[5], emp[6], emp[7], emp[8], emp[9], emp[10],
-                         emp[11], emp[12], emp[13]))
-
-        for emp_id in emp_list:
-            emp_id_list.append(emp_id.read_id())
-
-        def update(data_list):
-            listbox_id.delete(0, END)
-
-            for item in data_list:
-                listbox_id.insert(END, item)
-
-        def fill(e):
-            """Populate entry boxes and image label based on ID clicked in listbox"""
-            global current_index
+        def set_default_entries():
+            """Deletes content from entry boxes and sets picture label to default user image"""
 
             entry_search.delete(0, END)
-            entry_search.insert(0, listbox_id.get(ANCHOR))
-
-            for e in range(len(emp_list)):
-                if emp_list[e].read_id() == listbox_id.get(ANCHOR):
-                    current_index = e
-
+            entry_first_name.config(state="normal")
             entry_first_name.delete(0, END)
-            entry_first_name.insert(END, emp_list[current_index].read_first_name())
+            entry_first_name.config(state="disabled")
 
+            entry_surname.config(state="normal")
             entry_surname.delete(0, END)
-            entry_surname.insert(END, emp_list[current_index].read_surname())
+            entry_surname.config(state="disabled")
 
+            entry_position.config(state="normal")
             entry_position.delete(0, END)
-            entry_position.insert(END, emp_list[current_index].read_position())
+            entry_position.config(state="disabled")
 
-            # render and insert image
-            img_byte = BytesIO(emp_list[current_index].read_picture())
-            window_portal.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
-            label_picture.config(image=window_portal.image)
+            label_picture.config(image=self.window_portal.default)
 
-        def check(e):
-            typed = entry_search.get()
-            if typed == '':
-                info = []
-                for x in emp_list:
-                    info.append(x.read_id())
-            else:
-                info = []
+        def search():
+            """Updates what listbox displays from what is searched on key release"""
 
-                for item in emp_id_list:
-                    if typed in item:
-                        info.append(item)
-            update(info)
+            # global variable
+            global emp_list
 
-        update(emp_id_list)
+            # get all data from database
+            cur.execute("SELECT * FROM Employee")
 
-        listbox_id.bind("<<ListboxSelect>>", fill)
-        entry_search.bind("<KeyRelease>", check)
+            # database stored in 2d array
+            array_2d = cur.fetchall()
 
-    emp_creator = EmployeeCreator(window_portal, search)
-    emp_displayer = EmployeeDisplayer(window_portal, search, set_default_entries)
+            emp_id_list = []
+            emp_list = []
 
-    def logout():
-        window_portal.destroy()
-        window.deiconify()
+            # creates a list of employees from database entries
+            for emp in array_2d:
+                emp_list.append(
+                    Employee(emp[0], emp[1], emp[2], emp[3], emp[4], emp[5], emp[6], emp[7], emp[8], emp[9], emp[10],
+                             emp[11], emp[12], emp[13]))
 
-    def exit_app():
-        window.quit()
+            # creates a list of employee ids
+            for emp_id in emp_list:
+                emp_id_list.append(emp_id.read_id())
 
-    # ============ GUI ============
+            def update(data_list):
+                """Updates listbox to what is in data list"""
 
-    # ======Frame Header======
-    frame_header = Frame(window_portal, width=1280, height=60, bg="#182c25")
-    frame_header.place(x=0, y=0)
+                listbox_id.delete(0, END)
 
-    # ======Frame Body======
-    frame_body = Frame(window_portal, width=1280, height=660)
-    frame_body.place(x=0, y=60)
+                for item in data_list:
+                    listbox_id.insert(END, item)
 
-    # ====== Canvas ======
-    canvas = Canvas(frame_body, width=1280, height=660, highlightthickness=0)
-    canvas.pack(fill="both", expand=True)
+            def fill(e):
+                """Populate entry boxes and image label based on ID clicked in listbox"""
 
-    # ====== Set Background image ======
-    canvas.create_image(0, 0, image=background, anchor="nw")
+                # global variable
+                global current_index
 
-    # ======Title label======
-    label_title = Label(frame_header, text="Employee Portal - Dashboard", font=header_font, bg="#182c25", fg="white")
-    label_title.place(x=5, y=0)
+                entry_search.delete(0, END)
+                entry_search.insert(0, listbox_id.get(ANCHOR))
 
-    # ======Live clock label======
-    label_clock = Label(frame_header, font=subtitle_font, bg="#182c25", fg="white")
-    label_clock.place(x=1000, y=0)
+                for e in range(len(emp_list)):
+                    if emp_list[e].read_id() == listbox_id.get(ANCHOR):
+                        current_index = e
 
-    # ======View employee button======
-    button_view_employee = Button(window_portal, text="Manage Employee", font="body_font", width=30, bg="#22311d",
-                                  fg="white",
-                                  command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
-    button_view_employee.place(x=20, y=80)
+                entry_first_name.config(state="normal")
+                entry_first_name.delete(0, END)
+                entry_first_name.insert(END, emp_list[current_index].read_first_name())
+                entry_first_name.config(state="disabled")
 
-    # ======Add new employee button======
-    button_add = Button(window_portal, text="Add Employee", font="body_font", width=30, bg="#22311d", fg="white",
-                        command=lambda: SingletonTwo.open_instance(window_portal))
-    button_add.place(x=340, y=80)
+                entry_surname.config(state="normal")
+                entry_surname.delete(0, END)
+                entry_surname.insert(END, emp_list[current_index].read_surname())
+                entry_surname.config(state="disabled")
 
-    # ======Log out button======
-    button_log_out = Button(window_portal, text="Logout", font="body_font", width=30, bg="#22311d", fg="white",
-                            command=logout)
-    button_log_out.place(x=660, y=80)
+                entry_position.config(state="normal")
+                entry_position.delete(0, END)
+                entry_position.insert(END, emp_list[current_index].read_position())
+                entry_position.config(state="disabled")
 
-    # ======Exit button======
-    button_exit = Button(window_portal, text="Exit", font="body_font", width=30, bg="#22311d", fg="white",
-                         command=exit_app)
-    button_exit.place(x=980, y=80)
+                # render and insert image
+                img_byte = BytesIO(emp_list[current_index].read_picture())
+                self.window_portal.image = ImageTk.PhotoImage(Image.open(img_byte).resize((200, 250), Image.ANTIALIAS))
+                label_picture.config(image=self.window_portal.image)
 
-    # ======Search Employee label======
-    label_id = Label(window_portal, text="Search (by ID)", font="body_font")
-    label_id.place(x=100, y=200)
+            def check(e):
+                """Checks if entry search content matches employee IDs and updates list"""
 
-    # ======Search entry box======
-    entry_search = Entry(window_portal, width=30, font="body_font")
-    entry_search.insert(END, '')
-    entry_search.focus_set()
-    entry_search.place(x=300, y=200)
+                typed = entry_search.get()
 
-    # ======Employee ID listbox======
-    listbox_id = Listbox(window_portal, width=30, height=20, font="body_font")
-    listbox_id.place(x=300, y=250)
+                if typed == '':
+                    info = []
+                    for x in emp_list:
+                        info.append(x.read_id())
+                else:
+                    info = []
 
-    # ======First name label======
-    label_first_name = Label(window_portal, text="First Name", font="body_font")
-    label_first_name.place(x=600, y=500)
+                    for item in emp_id_list:
+                        if typed in item:
+                            info.append(item)
+                update(info)
+            update(emp_id_list)
 
-    # ======First name entry box======
-    entry_first_name = Entry(window_portal, width=20, font="body_font")
-    entry_first_name.insert(END, '')
-    entry_first_name.place(x=700, y=500)
+            listbox_id.bind("<<ListboxSelect>>", fill)
+            entry_search.bind("<KeyRelease>", check)
 
-    # ======Surname label======
-    label_surname = Label(window_portal, text="Surname", font="body_font")
-    label_surname.place(x=600, y=550)
+        emp_creator = EmployeeCreator(self.window_portal, search)
+        emp_displayer = EmployeeDisplayer(self.window_portal, search, set_default_entries)
 
-    # ======Surname entry box======
-    entry_surname = Entry(window_portal, width=20, font="body_font")
-    entry_surname.insert(END, '')
-    entry_surname.place(x=700, y=550)
+        def logout():
+            """Destroys current window and opens login page"""
 
-    # ======Position label======
-    label_position = Label(window_portal, text="Position", font="body_font")
-    label_position.place(x=600, y=610)
+            self.window_portal.destroy()
+            window.deiconify()
 
-    # ======Position entry box======
-    entry_position = Entry(window_portal, width=20, font="body_font")
-    entry_position.insert(END, '')
-    entry_position.place(x=700, y=610)
+        def exit_app():
+            """Quits application"""
 
-    # ======Picture label======
-    window_portal.default = PhotoImage(file="./images/user.png")
+            window.quit()
 
-    label_picture = Label(window_portal, relief="raised", width=200, height=250, image=window_portal.default)
-    label_picture.place(x=700, y=200)
+        # ============ GUI ============
 
-    # start methods
-    search()
-    live_clock()
+        # ======Frame Header======
+        frame_header = Frame(self.window_portal, width=1280, height=60, bg="#182c25")
+        frame_header.place(x=0, y=0)
+
+        frame_body = Frame(self.window_portal, width=1280, height=600, bg="red")
+        frame_body.place(x=0, y=60)
+
+        # ======Canvas======
+        canvas = Canvas(frame_body, width=1280, height=660, highlightthickness=0)
+        canvas.pack(fill="both", expand=True)
+        canvas.create_image(0, 0, image=self.background, anchor="nw")
+
+        # ======Title label======
+        label_title = Label(frame_header, text="Employee Portal - Dashboard", font=header_font, bg="#182c25",
+                            fg="white")
+        label_title.place(x=5, y=0)
+
+        # ======Live clock label======
+        label_clock = Label(frame_header, font=subtitle_font, bg="#182c25", fg="white")
+        label_clock.place(x=980, y=0)
+
+        # ======View employee button======
+        button_view_employee = Button(self.window_portal, text="Manage Employee", font=12, width=30,
+                                      bg="#1e453e", fg="white", activebackground="#306844",
+                                      command=lambda: Singleton.open_instance(self.window_portal, current_index,
+                                                                              emp_list))
+        button_view_employee.place(x=20, y=80)
+
+        # ======Add new employee button======
+        button_add = Button(self.window_portal, text="Add Employee", font=12, width=30, bg="#1e453e",
+                            fg="white", activebackground="#306844",
+                            command=lambda: SingletonTwo.open_instance(self.window_portal))
+        button_add.place(x=340, y=80)
+
+        # ======Log out button======
+        button_log_out = Button(self.window_portal, text="Logout", font=12, width=30, bg="#1e453e", fg="white",
+                                activebackground="#306844", command=logout)
+        button_log_out.place(x=660, y=80)
+
+        # ======Exit button======
+        button_exit = Button(self.window_portal, text="Exit", font=12, width=30, bg="#1e453e", fg="white",
+                             activebackground="#990000", command=exit_app)
+        button_exit.place(x=980, y=80)
+
+        # ======Search Employee text======
+        canvas.create_text(230, 150, text="Search by ID", font=("Century Gothic", 12, 'bold'), fill="darkgreen")
+
+        # ======Search entry box======
+        entry_search = Entry(self.window_portal, width=30, font=("Century Gothic", 10))
+        entry_search.insert(END, '')
+        entry_search.focus_set()
+        entry_search.place(x=300, y=200)
+
+        # ======Employee ID listbox======
+        listbox_id = Listbox(self.window_portal, width=30, height=20, font=("Century Gothic", 10))
+        listbox_id.place(x=300, y=250)
+
+        # ======First name text======
+        canvas.create_text(650, 450, text="First Name", font=("Century Gothic", 12, 'bold'), fill="darkgreen")
+
+        # ======First name entry box======
+        entry_first_name = Entry(self.window_portal, width=28, font=("Century Gothic", 10), state="disabled")
+        entry_first_name.insert(END, '')
+        entry_first_name.place(x=700, y=500)
+
+        # ======Surname text======
+        canvas.create_text(650, 500, text="Surname", font=("Century Gothic", 12, 'bold'), fill="darkgreen")
+
+        # ======Surname entry box======
+        entry_surname = Entry(self.window_portal, width=28, font=("Century Gothic", 10), state="disabled")
+        entry_surname.insert(END, '')
+        entry_surname.place(x=700, y=545)
+
+        # ======Position text======
+        canvas.create_text(650, 545, text="Position", font=("Century Gothic", 12, 'bold'), fill="darkgreen")
+
+        # ======Position entry box======
+        entry_position = Entry(self.window_portal, width=28, font=("Century Gothic", 10), state="disabled")
+        entry_position.insert(END, '')
+        entry_position.place(x=700, y=590)
+
+        # ======Picture label======
+        self.window_portal.default = PhotoImage(file="./images/user.png")
+
+        label_picture = Label(self.window_portal, relief="raised", width=200, height=250,
+                              image=self.window_portal.default)
+        label_picture.place(x=700, y=200)
+
+        # start methods
+        search()
+        live_clock()

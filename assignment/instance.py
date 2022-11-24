@@ -1,3 +1,10 @@
+"""
+Employee Portal
+    instance.py
+
+Stefana Chiritescu
+"""
+
 from tkinter import *
 from io import BytesIO
 from tkinter import messagebox
@@ -8,6 +15,7 @@ from tkcalendar import DateEntry
 from fonts import *
 from database import *
 
+# global variables
 global parent_update, default_parent_state
 
 
@@ -21,20 +29,27 @@ class EmployeeDisplayer:
 
     @staticmethod
     def read_window(self):
+        """Returns current window"""
+
         return self.window_employee
 
     @staticmethod
     def display_employee(self, window_portal, emp_data, index):
+        """Initializes GUI for managing employee as toplevel"""
+
+        # GUI settings
         self.window_employee = Toplevel(window_portal)
         self.window_employee.geometry("720x1000")
         self.window_employee.title("Employee Portal - Employee Management System | Employee Information")
         self.window_employee.resizable(False, False)
         self.window_employee.config(bg="#B0B6A1", highlightbackground="black", highlightthickness=4)
 
-        header = PhotoImage(file="images/header.png")
-
         # ============ METHODS ============
         def display_instance():
+            """Displays instance of employee selected in portal.py"""
+
+            # inserts information of current employee into label, entry boxes, radio buttons, option menu and text box
+            # using Employee class read methods
             label_current.config(text="Employee ID: " + emp_data[index].read_id())
 
             entry_id.delete(0, END)
@@ -104,18 +119,21 @@ class EmployeeDisplayer:
             label_picture.config(image=self.window_employee.image)
 
         def update_employee():
-            global parent_update
-            cur.execute("SELECT * FROM Employee")
-            current_employee = cur.fetchall()[index]
-            print(current_employee)
+            """Selects current employee from database, gets information from window and updates their
+            information in database """
 
+            # global variable
+            global parent_update
+
+            cur.execute("SELECT * FROM Employee")
+
+            # gets content from entry fields, radio buttons, date entry, spinbox and text box
             new_first_name = entry_first_name.get()
             new_surname = entry_surname.get()
             new_gender = rb_gender.get()
             new_department = department.get()
             new_position = entry_position.get()
             new_dob = date_entry_dob.get()
-            print(date_entry_dob.get())
             new_email = entry_email.get()
             new_contact = entry_contact.get()
             new_salary = spinbox_salary.get()
@@ -123,27 +141,37 @@ class EmployeeDisplayer:
             new_address = text_address.get("1.0", END)
 
             cur.execute(
+                # [SQL] updates current employee information in database
                 "UPDATE Employee SET first_name = (\'" + new_first_name + "\'), surname = (\'" + new_surname + "\'),  gender = (\'" + new_gender + "\'), department = (\'" + new_department + "\'), position = (\'" + new_position + "\'), date_of_birth = (\'" + new_dob + "\'), email = (\'" + new_email + "\'), contact = (\'" + new_contact + "\'), salary = (\'" + new_salary + "\'), active = (\'" + new_active + "\'), address = (\'" + new_address + "\') WHERE emp_id = \'" + entry_id.get() + "\'")
             con.commit()
 
+            # message upon success
             messagebox.showinfo("Employee Updated", "Current employee information was updated successfully.")
+
             parent_update()
             default_parent_state()
 
         def delete_employee():
+            """Deletes current employee from database"""
+
+            # global variable
             global parent_update
+
+            # [SQL] deletes current employee from database
             cur.execute("DELETE FROM Employee WHERE emp_id = \'" + entry_id.get() + "\'")
             con.commit()
 
             messagebox.showinfo("Employee Deleted", "Current employee has been deleted from the database successfully.")
+
+            # destroys current window
             self.window_employee.destroy()
 
             parent_update()
             default_parent_state()
 
         def on_closing():
+            """Destroys current window when window is closed (X)"""
             self.window_employee.destroy()
-
         self.window_employee.protocol("WM_DELETE_WINDOW", on_closing)
 
         # ============ GUI ============
@@ -295,13 +323,13 @@ class EmployeeDisplayer:
         label_picture.place(x=450, y=120)
 
         # ======Update button======
-        button_update = Button(self.window_employee, text="Update", command=update_employee, width=10,
-                               bg="#22311d", fg="white")
+        button_update = Button(self.window_employee, text="Update", command=update_employee, width=10, font=12,
+                               bg="#1e453e", fg="white", activebackground="#306844")
         button_update.place(x=180, y=900)
 
         # ======Delete button======
-        button_delete = Button(self.window_employee, text="Delete", command=delete_employee, width=10,
-                               bg="#22311d", fg="white")
+        button_delete = Button(self.window_employee, text="Delete", command=delete_employee, width=10, font=12,
+                               bg="#1e453e", fg="white", activebackground="#306844")
         button_delete.place(x=460, y=900)
 
         # start method
