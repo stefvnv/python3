@@ -8,14 +8,16 @@ from io import BytesIO
 from PIL import Image, ImageTk
 from database import *
 from create_employee import *
+from fonts import *
 
 # variables
-current_index = -1
-emp_list = []
 global emp_displayer
 global emp_creator
 global search
 global set_default_entries
+
+emp_list = []
+current_index = -1
 
 
 class Singleton:
@@ -64,8 +66,9 @@ class SingletonTwo:
 
 def initiate_portal(window):
     """Initiates the GUI"""
-
     global emp_creator, search, emp_displayer, set_default_entries
+
+    background = PhotoImage(file="images/background_portal.png")
 
     window_portal = Toplevel(window)
     window_portal.geometry("1280x720")
@@ -113,7 +116,6 @@ def initiate_portal(window):
 
         def fill(e):
             """Populate entry boxes and image label based on ID clicked in listbox"""
-            print(e)
             global current_index
 
             entry_search.delete(0, END)
@@ -131,8 +133,6 @@ def initiate_portal(window):
 
             entry_position.delete(0, END)
             entry_position.insert(END, emp_list[current_index].read_position())
-
-            # TODO: do conversion to byte after getting
 
             # render and insert image
             img_byte = BytesIO(emp_list[current_index].read_picture())
@@ -171,75 +171,89 @@ def initiate_portal(window):
     # ============ GUI ============
 
     # ======Frame Header======
-    frame_header = Frame(window_portal, width=1280, height=60, bg="red")
+    frame_header = Frame(window_portal, width=1280, height=60, bg="#182c25")
     frame_header.place(x=0, y=0)
 
-    # ======Live clock======
-    label_clock = Label(frame_header, font=subtitle_font, anchor="e")
-    label_clock.place(x=860, y=0)
+    # ======Frame Body======
+    frame_body = Frame(window_portal, width=1280, height=660)
+    frame_body.place(x=0, y=60)
+
+    # ====== Canvas ======
+    canvas = Canvas(frame_body, width=1280, height=660, highlightthickness=0)
+    canvas.pack(fill="both", expand=True)
+
+    # ====== Set Background image ======
+    canvas.create_image(0, 0, image=background, anchor="nw")
 
     # ======Title label======
-    label_title = Label(frame_header, font=header_font, text="Employee Portal - Dashboard")
-    label_title.place(x=10, y=10)
+    label_title = Label(frame_header, text="Employee Portal - Dashboard", font=header_font, bg="#182c25", fg="white")
+    label_title.place(x=5, y=0)
+
+    # ======Live clock label======
+    label_clock = Label(frame_header, font=subtitle_font, bg="#182c25", fg="white")
+    label_clock.place(x=1000, y=0)
 
     # ======View employee button======
-    button_view_employee = Button(window_portal, text="Manage Employee", font="body_font", width=30, bg="#22311d", fg="white",
+    button_view_employee = Button(window_portal, text="Manage Employee", font="body_font", width=30, bg="#22311d",
+                                  fg="white",
                                   command=lambda: Singleton.open_instance(window_portal, current_index, emp_list))
-    button_view_employee.place(x=0, y=80)
+    button_view_employee.place(x=20, y=80)
 
     # ======Add new employee button======
     button_add = Button(window_portal, text="Add Employee", font="body_font", width=30, bg="#22311d", fg="white",
                         command=lambda: SingletonTwo.open_instance(window_portal))
-    button_add.place(x=320, y=80)
+    button_add.place(x=340, y=80)
 
     # ======Log out button======
-    button_log_out = Button(window_portal, text="Logout", font="body_font", width=30, bg="#22311d", fg="white", command=logout)
-    button_log_out.place(x=640, y=80)
+    button_log_out = Button(window_portal, text="Logout", font="body_font", width=30, bg="#22311d", fg="white",
+                            command=logout)
+    button_log_out.place(x=660, y=80)
 
     # ======Exit button======
-    button_exit = Button(window_portal, text="Exit", font="body_font", width=30, bg="#22311d", fg="white", command=exit_app)
-    button_exit.place(x=960, y=80)
+    button_exit = Button(window_portal, text="Exit", font="body_font", width=30, bg="#22311d", fg="white",
+                         command=exit_app)
+    button_exit.place(x=980, y=80)
 
     # ======Search Employee label======
     label_id = Label(window_portal, text="Search (by ID)", font="body_font")
     label_id.place(x=100, y=200)
 
     # ======Search entry box======
-    entry_search = Entry(window_portal, width=40, font="body_font")
+    entry_search = Entry(window_portal, width=30, font="body_font")
     entry_search.insert(END, '')
     entry_search.focus_set()
     entry_search.place(x=300, y=200)
 
     # ======Employee ID listbox======
-    listbox_id = Listbox(window_portal, width=40, height=5, font="body_font")
-    listbox_id.place(x=300, y=120)
+    listbox_id = Listbox(window_portal, width=30, height=20, font="body_font")
+    listbox_id.place(x=300, y=250)
 
     # ======First name label======
     label_first_name = Label(window_portal, text="First Name", font="body_font")
-    label_first_name.place(x=400, y=240)
+    label_first_name.place(x=600, y=500)
 
     # ======First name entry box======
-    entry_first_name = Entry(window_portal, width=40, font="body_font")
+    entry_first_name = Entry(window_portal, width=20, font="body_font")
     entry_first_name.insert(END, '')
-    entry_first_name.place(x=500, y=240)
+    entry_first_name.place(x=700, y=500)
 
     # ======Surname label======
     label_surname = Label(window_portal, text="Surname", font="body_font")
-    label_surname.place(x=400, y=320)
+    label_surname.place(x=600, y=550)
 
     # ======Surname entry box======
-    entry_surname = Entry(window_portal, width=40, font="body_font")
+    entry_surname = Entry(window_portal, width=20, font="body_font")
     entry_surname.insert(END, '')
-    entry_surname.place(x=500, y=320)
+    entry_surname.place(x=700, y=550)
 
     # ======Position label======
     label_position = Label(window_portal, text="Position", font="body_font")
-    label_position.place(x=400, y=400)
+    label_position.place(x=600, y=610)
 
     # ======Position entry box======
-    entry_position = Entry(window_portal, width=40, font="body_font")
+    entry_position = Entry(window_portal, width=20, font="body_font")
     entry_position.insert(END, '')
-    entry_position.place(x=500, y=400)
+    entry_position.place(x=700, y=610)
 
     # ======Picture label======
     window_portal.default = PhotoImage(file="./images/user.png")

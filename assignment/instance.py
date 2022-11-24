@@ -29,7 +29,9 @@ class EmployeeDisplayer:
         self.window_employee.geometry("720x1000")
         self.window_employee.title("Employee Portal - Employee Management System | Employee Information")
         self.window_employee.resizable(False, False)
-        self.window_employee.config(bg="#B0B6A1")
+        self.window_employee.config(bg="#B0B6A1", highlightbackground="black", highlightthickness=4)
+
+        header = PhotoImage(file="images/header.png")
 
         # ============ METHODS ============
         def display_instance():
@@ -45,7 +47,6 @@ class EmployeeDisplayer:
             entry_surname.delete(0, END)
             entry_surname.insert(END, emp_data[index].read_surname())
 
-            # fix - not to update everything (separate method)
             if emp_data[index].read_gender() == "Male":
                 rb_gender.set("Male")
             else:
@@ -90,7 +91,6 @@ class EmployeeDisplayer:
             spinbox_salary.delete(0, END)
             spinbox_salary.insert(END, emp_data[index].read_salary())
 
-            # fix - not to update everything (separate method)
             if emp_data[index].read_active() == 1:
                 rb_active.set("Yes")
             else:
@@ -109,21 +109,18 @@ class EmployeeDisplayer:
             current_employee = cur.fetchall()[index]
             print(current_employee)
 
-            # new_id = entry_id.get()
             new_first_name = entry_first_name.get()
             new_surname = entry_surname.get()
             new_gender = rb_gender.get()
             new_department = department.get()
             new_position = entry_position.get()
             new_dob = date_entry_dob.get()
+            print(date_entry_dob.get())
             new_email = entry_email.get()
             new_contact = entry_contact.get()
             new_salary = spinbox_salary.get()
             new_active = rb_active.get()
             new_address = text_address.get("1.0", END)
-
-            # complete
-            new_picture = ""
 
             cur.execute(
                 "UPDATE Employee SET first_name = (\'" + new_first_name + "\'), surname = (\'" + new_surname + "\'),  gender = (\'" + new_gender + "\'), department = (\'" + new_department + "\'), position = (\'" + new_position + "\'), date_of_birth = (\'" + new_dob + "\'), email = (\'" + new_email + "\'), contact = (\'" + new_contact + "\'), salary = (\'" + new_salary + "\'), active = (\'" + new_active + "\'), address = (\'" + new_address + "\') WHERE emp_id = \'" + entry_id.get() + "\'")
@@ -152,151 +149,160 @@ class EmployeeDisplayer:
         # ============ GUI ============
 
         # ======Frame header======
-        frame_header = Frame(self.window_employee, width=720, height=60, bg="red")
+        frame_header = Frame(self.window_employee, width=720, height=60, bg="#182c25")
         frame_header.place(x=0, y=0)
 
         # ======Title label======
-        label_title = Label(frame_header, font=title_font, text="Employee Portal")
+        label_title = Label(frame_header, font=title_font, text="Employee Portal", fg="white", bg="#182c25")
         label_title.place(x=10, y=0)
 
         # ======Current Employee ID label======
-        label_current = Label(frame_header, font=subtitle_font)
-        label_current.place(x=485, y=20)
+        label_current = Label(frame_header, font=subtitle_font, fg="white", bg="#182c25")
+        label_current.place(x=450, y=20)
 
         # ======Employee ID label======
-        label_id = Label(self.window_employee, text="Employee ID:")
-        label_id.place(x=50, y=120)
+        label_id = Label(self.window_employee, text="Employee ID", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_id.place(x=40, y=120)
 
         # ======Employee ID entry box======
-        entry_id = Entry(self.window_employee, width=30)
+        entry_id = Entry(self.window_employee, font=small_font, width=30)
         entry_id.insert(END, '')
         entry_id.place(x=150, y=120)
 
         # ======First name label======
-        label_first_name = Label(self.window_employee, text="First Name:")
-        label_first_name.place(x=50, y=200)
+        label_first_name = Label(self.window_employee, font=body_font, text="First Name", bg="#B0B6A1", fg="#182c25")
+        label_first_name.place(x=40, y=200)
 
         # ======First name entry box======
-        entry_first_name = Entry(self.window_employee, width=30)
+        entry_first_name = Entry(self.window_employee, font=small_font, width=30)
         entry_first_name.insert(END, '')
         entry_first_name.place(x=150, y=200)
 
         # ======Surname label======
-        label_surname = Label(self.window_employee, text="Surname:")
-        label_surname.place(x=50, y=280)
+        label_surname = Label(self.window_employee, font=body_font, text="Surname", bg="#B0B6A1", fg="#182c25")
+        label_surname.place(x=40, y=280)
 
         # ======Surname entry box======
-        entry_surname = Entry(self.window_employee, width=30)
+        entry_surname = Entry(self.window_employee, font=small_font, width=30)
         entry_surname.insert(END, '')
         entry_surname.place(x=150, y=280)
 
         # ======Gender label======
-        label_gender = Label(self.window_employee, text="Gender:")
-        label_gender.place(x=50, y=360)
+        label_gender = Label(self.window_employee, font=body_font, text="Gender", bg="#B0B6A1", fg="#182c25")
+        label_gender.place(x=40, y=360)
 
         # ======Gender radio buttons======
         rb_gender = StringVar()
 
-        radiobutton_male = Radiobutton(self.window_employee, text="Male", variable=rb_gender, value="Male")
+        radiobutton_male = Radiobutton(self.window_employee, text="Male", font=small_font, variable=rb_gender,
+                                       value="Male", bg="#B0B6A1")
         radiobutton_male.place(x=150, y=360)
 
-        radiobutton_female = Radiobutton(self.window_employee, text="Female", variable=rb_gender, value="Female")
+        radiobutton_female = Radiobutton(self.window_employee, text="Female", font=small_font, variable=rb_gender,
+                                         value="Female", bg="#B0B6A1")
         radiobutton_female.place(x=260, y=360)
 
         # ======Department label======
-        label_department = Label(self.window_employee, text="Department:")
-        label_department.place(x=50, y=440)
+        label_department = Label(self.window_employee, text="Department", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_department.place(x=40, y=440)
 
         # ======Department option menu======
         list_departments = ["Business Development", "Services", "Marketing", "Engineering", "Training", "Legal",
                             "Human Resources", "Sales", "Product Management", "Support", "Product Management"]
         department = StringVar()
         option_menu_department = OptionMenu(self.window_employee, department, *list_departments)
+        option_menu_department["menu"].config(font=small_font)
+        department.set("Business Development")
+        option_menu_department.config(font=small_font)
         option_menu_department.place(x=150, y=440)
 
         # ======Position label======
-        label_position = Label(self.window_employee, text="Position:")
+        label_position = Label(self.window_employee, font=body_font, text="Position", bg="#B0B6A1", fg="#182c25")
         label_position.place(x=380, y=440)
 
         # ======Position entry box======
-        entry_position = Entry(self.window_employee, width=30)
+        entry_position = Entry(self.window_employee, width=27, font=small_font)
         entry_position.insert(END, '')
-        entry_position.place(x=480, y=440)
+        entry_position.place(x=460, y=440)
 
         # ======Date of birth label======
-        label_dob = Label(self.window_employee, text="Date of Birth:")
-        label_dob.place(x=50, y=520)
+        label_dob = Label(self.window_employee, text="Date of Birth", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_dob.place(x=40, y=520)
 
         # ======Date of birth date entry======
-        date_entry_dob = DateEntry(self.window_employee, width=12, borderwidth=2)
+        date_entry_dob = DateEntry(self.window_employee, width=12, borderwidth=2, font=small_font)
         date_entry_dob.place(x=150, y=520)
 
         # ======Start date label======
-        label_start_date = Label(self.window_employee, text="Start Date:")
+        label_start_date = Label(self.window_employee, text="Start Date", font=body_font, bg="#B0B6A1", fg="#182c25")
         label_start_date.place(x=380, y=520)
 
         # ======Start date date entry======
-        date_entry_start_date = DateEntry(self.window_employee, width=12, borderwidth=2)
-        date_entry_start_date.place(x=480, y=520)
+        date_entry_start_date = DateEntry(self.window_employee, width=12, borderwidth=2, font=small_font)
+        date_entry_start_date.place(x=460, y=520)
 
         # ======Email label======
-        label_email = Label(self.window_employee, text="Email:")
-        label_email.place(x=50, y=600)
+        label_email = Label(self.window_employee, text="Email", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_email.place(x=40, y=600)
 
         # ======Email entry box======
-        entry_email = Entry(self.window_employee, width=30)
+        entry_email = Entry(self.window_employee, width=30, font=small_font)
         entry_email.insert(END, '')
         entry_email.place(x=150, y=600)
 
         # ======Contact label======
-        label_contact = Label(self.window_employee, text="Contact:")
+        label_contact = Label(self.window_employee, text="Contact", font=body_font, bg="#B0B6A1", fg="#182c25")
         label_contact.place(x=380, y=600)
 
         # ======Contact entry box======
-        entry_contact = Entry(self.window_employee, width=30)
+        entry_contact = Entry(self.window_employee, width=27, font=small_font)
         entry_contact.insert(END, '')
-        entry_contact.place(x=480, y=600)
+        entry_contact.place(x=460, y=600)
 
         # ======Salary label======
-        label_salary = Label(self.window_employee, text="Salary:")
-        label_salary.place(x=50, y=640)
+        label_salary = Label(self.window_employee, text="Salary", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_salary.place(x=40, y=670)
 
         # ======Salary entry box======
-        spinbox_salary = Spinbox(self.window_employee, from_=0, to=1000000, increment=1000)
-        spinbox_salary.place(x=150, y=640)
+        spinbox_salary = Spinbox(self.window_employee, from_=0, to=1000000, increment=1000, font=small_font)
+        spinbox_salary.place(x=150, y=670)
 
         # ======Active label======
-        label_active = Label(self.window_employee, text="Active:")
-        label_active.place(x=380, y=640)
+        label_active = Label(self.window_employee, text="Active", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_active.place(x=380, y=670)
 
         # ======Active radio buttons======
         rb_active = StringVar()
 
-        radiobutton_yes = Radiobutton(self.window_employee, text="Yes", variable=rb_active, value="Yes")
-        radiobutton_yes.place(x=450, y=640)
+        radiobutton_yes = Radiobutton(self.window_employee, text="Yes", font=small_font, variable=rb_active,
+                                      value="Yes", bg="#B0B6A1")
+        radiobutton_yes.place(x=460, y=670)
 
-        radiobutton_no = Radiobutton(self.window_employee, text="No", variable=rb_active, value="No")
-        radiobutton_no.place(x=500, y=640)
-
-        # ======Address label======
-        label_address = Label(self.window_employee, text="Address:")
-        label_address.place(x=50, y=720)
+        radiobutton_no = Radiobutton(self.window_employee, text="No", font=small_font, variable=rb_active, value="No",
+                                     bg="#B0B6A1")
+        radiobutton_no.place(x=570, y=670)
 
         # ======Address label======
-        text_address = Text(self.window_employee, width=64, height=10)
-        text_address.place(x=150, y=720)
+        label_address = Label(self.window_employee, text="Address", font=body_font, bg="#B0B6A1", fg="#182c25")
+        label_address.place(x=40, y=740)
+
+        # ======Address text======
+        text_address = Text(self.window_employee, width=72, height=6, font=small_font)
+        text_address.place(x=150, y=740)
 
         # ======Picture label======
         label_picture = Label(self.window_employee, relief="raised")
-        label_picture.place(x=460, y=120)
+        label_picture.place(x=450, y=120)
 
         # ======Update button======
-        button_update = Button(self.window_employee, text="Update", command=update_employee)
-        button_update.place(x=200, y=900)
+        button_update = Button(self.window_employee, text="Update", command=update_employee, width=10,
+                               bg="#22311d", fg="white")
+        button_update.place(x=180, y=900)
 
         # ======Delete button======
-        button_delete = Button(self.window_employee, text="Delete", command=delete_employee)
-        button_delete.place(x=480, y=900)
+        button_delete = Button(self.window_employee, text="Delete", command=delete_employee, width=10,
+                               bg="#22311d", fg="white")
+        button_delete.place(x=460, y=900)
 
         # start method
         display_instance()
