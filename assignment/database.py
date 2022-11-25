@@ -8,7 +8,7 @@ Stefana Chiritescu
 import sqlite3
 
 # connect to database
-con = sqlite3.connect("../employees.db")
+con = sqlite3.connect("employees.db")
 cur = con.cursor()
 
 # creates database and inserts table if it does not exist
